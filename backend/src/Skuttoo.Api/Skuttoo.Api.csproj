@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.9">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Scalar.AspNetCore" Version="2.16.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Skuttoo.Application\Skuttoo.Application.csproj" />
+    <ProjectReference Include="..\Skuttoo.Infrastructure\Skuttoo.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <!-- Layered settings live under Config/. The Web SDK already globs appsettings*.json as
+       Content; just ensure they are copied to the output directory (preserving Config/ path). -->
+  <ItemGroup>
+    <Content Update="Config\appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Update="Config\appsettings.*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

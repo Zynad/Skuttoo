@@ -1,0 +1,18 @@
+# Local full-stack run: builds the frontend + backend into one image, serves on http://localhost:8080.
+#   docker compose up --build
+services:
+  skuttoo:
+    build:
+      context: .
+      target: final
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Default=Data Source=/home/data/app.db
+      # No Speech key here — audio falls back to the browser's SpeechSynthesis.
+    volumes:
+      - skuttoo-data:/home/data
+
+volumes:
+  skuttoo-data:

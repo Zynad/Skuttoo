@@ -1,0 +1,63 @@
+# Root .gitignore — backstop for the whole repo. Per-project ignores live in backend/ and frontend/.
+# PUBLIC REPO: never commit secrets.
+
+# ---- Secrets / local config (hard rule) ----
+**/appsettings.Development.json
+**/appsettings.*.local.json
+.env
+.env.*
+!.env.example
+*.pubxml
+*.pubxml.user
+*.PublishSettings
+**/secrets.json
+
+# ---- SQLite database files ----
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# ---- .NET build output ----
+[Bb]in/
+[Oo]bj/
+TestResults/
+
+# ---- IDEs / editors ----
+# JetBrains (WebStorm, Rider)
+.idea/
+*.iml
+*.ipr
+*.iws
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+# Visual Studio Code (ignore personal config; share via .vscode/*.example if needed)
+.vscode/
+*.code-workspace
+
+# ---- Node / frontend build ----
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# ---- SPA build folded into the API at build/deploy time (never committed) ----
+backend/src/Skuttoo.Api/wwwroot/*
+!backend/src/Skuttoo.Api/wwwroot/.gitkeep
+
+# ---- Test / E2E artifacts ----
+**/test-results/
+**/playwright-report/
+**/blob-report/
+**/.playwright/
+**/coverage/
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+*.log

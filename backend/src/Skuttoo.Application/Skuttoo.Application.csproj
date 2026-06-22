@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Skuttoo.Domain\Skuttoo.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.9" />
+    <PackageReference Include="Riok.Mapperly" Version="4.3.1" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!--
+      RMG020: Mapperly warns about source members not mapped to a target. These are
+      intentional: navigation props, reward fields, and (critically) Choice.IsCorrect are
+      deliberately NOT projected onto the play DTOs so they never reach clients.
+    -->
+    <NoWarn>$(NoWarn);RMG020</NoWarn>
+  </PropertyGroup>
+
+</Project>

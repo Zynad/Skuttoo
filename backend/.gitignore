@@ -1,0 +1,19 @@
+# Build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+
+# SQLite database files (content is reseeded; never commit data)
+*.db
+*.db-shm
+*.db-wal
+
+# Dev-only / secret config (placeholders-only appsettings.json IS committed)
+**/Config/appsettings.Development.json
+**/Config/appsettings.*.local.json
+*.user
+
+# Publish / deployment secrets
+*.pubxml
+*.PublishSettings

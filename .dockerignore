@@ -1,0 +1,22 @@
+# Keep the Docker build context small and free of build artifacts / secrets.
+**/bin
+**/obj
+**/node_modules
+**/dist
+**/.vite
+**/test-results
+**/playwright-report
+**/blob-report
+**/coverage
+**/*.db
+**/*.db-shm
+**/*.db-wal
+**/appsettings.Development.json
+**/appsettings.*.local.json
+.env
+.env.*
+.git
+.github
+.vs
+docs
+*.md

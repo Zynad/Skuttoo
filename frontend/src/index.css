@@ -1,0 +1,285 @@
+@import 'tailwindcss';
+
+/*
+  Skuttoo design tokens.
+  Semantic CSS custom properties — components reference these, NEVER raw hex.
+  Aesthetic: a warm, sun-drenched archipelago. Soft "clay" rounded shapes,
+  a sunset-coral brand, four richly-themed island palettes. Dark mode = night sky.
+*/
+
+@theme {
+  /* Playful rounded font stacks — system fonts only (offline-safe, no CDN). */
+  --font-display:
+    'Baloo 2', 'Quicksand', 'Nunito', ui-rounded, 'Hiragino Maru Gothic ProN', 'Segoe UI Rounded', 'SF Pro Rounded',
+    system-ui, sans-serif;
+  --font-body: 'Nunito', ui-rounded, 'Segoe UI', system-ui, -apple-system, sans-serif;
+
+  /* Generous playful radii. */
+  --radius-pill: 999px;
+}
+
+:root {
+  color-scheme: light;
+
+  /* Brand / UI */
+  --color-primary: #ff7a59;
+  --color-primary-strong: #f25c38;
+  --color-primary-soft: #ffd9cb;
+  --color-accent: #ffc247;
+  --color-surface: #fffaf2;
+  --color-surface-raised: #ffffff;
+  --color-surface-sunk: #fdeede;
+  --color-text: #3a2a23;
+  --color-text-soft: #7c6a60;
+  --color-border: #f0ddc9;
+
+  --color-success: #38b26b;
+  --color-success-soft: #cdf2dc;
+  --color-warn: #f6a623;
+  --color-warn-soft: #ffe9c2;
+
+  /* Island themes — each gets a base, soft (background) and accent. */
+  --island-math: #5b6cf2; /* space / cosmic indigo */
+  --island-math-soft: #e2e6ff;
+  --island-math-accent: #a7b4ff;
+
+  --island-swedish: #3aa564; /* forest green */
+  --island-swedish-soft: #d6f2e0;
+  --island-swedish-accent: #8fd9a8;
+
+  --island-english: #1fb5c4; /* travel / sky teal */
+  --island-english-soft: #d2f3f6;
+  --island-english-accent: #84dde6;
+
+  --island-logic: #e0791b; /* jungle amber */
+  --island-logic-soft: #ffe6c9;
+  --island-logic-accent: #f5b870;
+
+  /* Reward colours */
+  --color-coin: #f6c026;
+  --color-coin-edge: #d99a07;
+  --color-star: #ffd84d;
+  --color-star-edge: #e9ad17;
+  --color-badge: #b06cf2;
+
+  /* Atmosphere */
+  --bg-sky-top: #ffe9c9;
+  --bg-sky-bottom: #ffd0e0;
+  --bg-sea: #bfeef2;
+  --shadow-clay: 0 10px 24px -8px rgb(58 42 35 / 0.28), 0 2px 0 0 rgb(255 255 255 / 0.6) inset;
+  --shadow-soft: 0 8px 20px -10px rgb(58 42 35 / 0.25);
+}
+
+:root.dark {
+  color-scheme: dark;
+
+  --color-primary: #ff8c6e;
+  --color-primary-strong: #ff7a59;
+  --color-primary-soft: #5a2f24;
+  --color-accent: #ffce63;
+  --color-surface: #1c1730;
+  --color-surface-raised: #2a2342;
+  --color-surface-sunk: #161126;
+  --color-text: #f5ecff;
+  --color-text-soft: #b8aad0;
+  --color-border: #3a3158;
+
+  --color-success: #4cd084;
+  --color-success-soft: #1e3b2a;
+  --color-warn: #ffc05a;
+  --color-warn-soft: #3d2f12;
+
+  --island-math: #8b97ff;
+  --island-math-soft: #2a2c52;
+  --island-math-accent: #6471d6;
+
+  --island-swedish: #5fd28a;
+  --island-swedish-soft: #1c3a2a;
+  --island-swedish-accent: #3f9c64;
+
+  --island-english: #4fd6e4;
+  --island-english-soft: #173b40;
+  --island-english-accent: #2ca3b0;
+
+  --island-logic: #f5a953;
+  --island-logic-soft: #3d2a13;
+  --island-logic-accent: #c9812f;
+
+  --color-coin: #ffce4a;
+  --color-coin-edge: #c99511;
+  --color-star: #ffe06b;
+  --color-star-edge: #d9a823;
+  --color-badge: #c98cff;
+
+  --bg-sky-top: #241c3e;
+  --bg-sky-bottom: #16122a;
+  --bg-sea: #15324a;
+  --shadow-clay: 0 10px 24px -8px rgb(0 0 0 / 0.55), 0 2px 0 0 rgb(255 255 255 / 0.06) inset;
+  --shadow-soft: 0 8px 20px -10px rgb(0 0 0 / 0.5);
+}
+
+/* Map tokens into Tailwind's color/utility namespace so utilities like
+   bg-surface, text-text, rounded-pill work and stay token-driven. */
+@theme inline {
+  --color-primary: var(--color-primary);
+  --color-primary-strong: var(--color-primary-strong);
+  --color-primary-soft: var(--color-primary-soft);
+  --color-accent: var(--color-accent);
+  --color-surface: var(--color-surface);
+  --color-surface-raised: var(--color-surface-raised);
+  --color-surface-sunk: var(--color-surface-sunk);
+  --color-text: var(--color-text);
+  --color-text-soft: var(--color-text-soft);
+  --color-border: var(--color-border);
+  --color-success: var(--color-success);
+  --color-warn: var(--color-warn);
+  --color-coin: var(--color-coin);
+  --color-star: var(--color-star);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-surface);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior-y: none;
+}
+
+/* Visible, friendly focus ring for keyboard users. */
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* ---- Motion ---- */
+@keyframes skuttoo-hop {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-14%);
+  }
+}
+
+@keyframes skuttoo-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(1deg);
+  }
+}
+
+@keyframes skuttoo-pop {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes skuttoo-float-up {
+  0% {
+    transform: translateY(0) scale(0.6);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-120px) scale(1.1) rotate(var(--spin, 20deg));
+    opacity: 0;
+  }
+}
+
+@keyframes skuttoo-rise {
+  from {
+    transform: translateY(18px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes skuttoo-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
+}
+
+@keyframes skuttoo-drift {
+  from {
+    transform: translateX(-6%);
+  }
+  to {
+    transform: translateX(6%);
+  }
+}
+
+.animate-hop {
+  animation: skuttoo-hop 0.9s ease-in-out infinite;
+}
+.animate-bob {
+  animation: skuttoo-bob 3s ease-in-out infinite;
+}
+.animate-pop {
+  animation: skuttoo-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.animate-rise {
+  animation: skuttoo-rise 0.5s ease-out both;
+}
+.animate-shake {
+  animation: skuttoo-shake 0.45s ease-in-out;
+}
+.animate-float-up {
+  animation: skuttoo-float-up 1.4s ease-out forwards;
+}
+.animate-drift {
+  animation: skuttoo-drift 9s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
