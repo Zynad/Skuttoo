@@ -27,7 +27,7 @@ Each island sub-phase reuses the same engine and adds its exercise types + seede
 | # | Sub-phase | Done when |
 |---|---|---|
 | 1.1 ✅ | **Content engine & exercise framework** | Generic exercise runner supporting multiple exercise types (multiple-choice, tap-to-match, drag-to-bucket), difficulty/levels, seeded from DB; per-type unit + E2E. Also introduced **content language** (`Subject.ContentLanguage`) so language islands teach in the target language while instructions stay in the child's UI language. |
-| 1.2 ⬜ | **Math island** | Counting, number recognition, simple addition, shapes; ≥3 difficulty levels spanning ages 3–9; seeded bilingual content + audio; tests. |
+| 1.2 ✅ | **Math island** | Counting, number recognition, simple addition, shapes; 4 levels (tiers 1–3) spanning ages 3–9; seeded bilingual content with audio path references (real Azure TTS clips deferred to 1.8 — `SpeechSynthesis` fallback meanwhile); backend integration tests + Playwright E2E for the addition & shape flows. |
 | 1.3 ⬜ | **Logic & shapes/colors island** | Sorting, patterns, colors, shapes — image-only, works for non-readers (3–5); tests. |
 | 1.4 ⬜ | **Swedish island** | Letter sounds, picture↔word matching, first reading; leans on TTS; tests. |
 | 1.5 ⬜ | **English island** | Listen-and-pick words/phrases; uses the bilingual setup; tests. |

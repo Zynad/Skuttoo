@@ -87,6 +87,26 @@ internal static class SeedData
                             new() { DisplayOrder = 3, Label = new LocalizedText("3", "3"), IsCorrect = false },
                         },
                     },
+                    new()
+                    {
+                        DisplayOrder = 3,
+                        Type = ExerciseType.CountObjects,
+                        ImageRef = "assets/img/apples-4.svg",
+                        Prompt = new LocalizedText(
+                            "Räkna äpplena. Hur många är det?",
+                            "Count the apples. How many are there?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/math-count-apples-4.mp3",
+                            "assets/audio/en/math-count-apples-4.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, Label = new LocalizedText("3", "3"), IsCorrect = false },
+                            new() { DisplayOrder = 2, Label = new LocalizedText("4", "4"), IsCorrect = true },
+                            new() { DisplayOrder = 3, Label = new LocalizedText("5", "5"), IsCorrect = false },
+                        },
+                    },
                 },
             },
             new()
@@ -95,7 +115,7 @@ internal static class SeedData
                 DifficultyTier = 2,
                 AgeMin = 5,
                 AgeMax = 8,
-                Title = new LocalizedText("Tal & former", "Numbers & shapes"),
+                Title = new LocalizedText("Tal", "Numbers"),
                 Exercises = new List<Exercise>
                 {
                     new()
@@ -141,6 +161,174 @@ internal static class SeedData
                             new() { DisplayOrder = 1, Label = new LocalizedText("2", "2"), ImageRef = "assets/img/number-2.svg", GroupKey = "lt4" },
                             new() { DisplayOrder = 2, Label = new LocalizedText("3", "3"), ImageRef = "assets/img/number-3.svg", GroupKey = "lt4" },
                             new() { DisplayOrder = 3, Label = new LocalizedText("5", "5"), ImageRef = "assets/img/number-5.svg", GroupKey = "ge4" },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 3,
+                        Type = ExerciseType.NumberRecognition,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Vilken är siffran 5?",
+                            "Which one is the number 5?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/math-number-5.mp3",
+                            "assets/audio/en/math-number-5.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/number-3.svg", IsCorrect = false },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/number-4.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/number-5.svg", IsCorrect = true },
+                        },
+                    },
+                },
+            },
+            new()
+            {
+                DisplayOrder = 3,
+                DifficultyTier = 2,
+                AgeMin = 5,
+                AgeMax = 8,
+                Title = new LocalizedText("Former", "Shapes"),
+                Exercises = new List<Exercise>
+                {
+                    new()
+                    {
+                        DisplayOrder = 1,
+                        Type = ExerciseType.ShapeMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Tryck på cirkeln.",
+                            "Tap the circle."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/math-shape-circle.mp3",
+                            "assets/audio/en/math-shape-circle.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, Label = new LocalizedText("Cirkel", "Circle"), ImageRef = "assets/img/shape-circle.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, Label = new LocalizedText("Fyrkant", "Square"), ImageRef = "assets/img/shape-square.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, Label = new LocalizedText("Triangel", "Triangle"), ImageRef = "assets/img/shape-triangle.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 2,
+                        Type = ExerciseType.ShapeMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Tryck på fyrkanten.",
+                            "Tap the square."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/math-shape-square.mp3",
+                            "assets/audio/en/math-shape-square.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, Label = new LocalizedText("Triangel", "Triangle"), ImageRef = "assets/img/shape-triangle.svg", IsCorrect = false },
+                            new() { DisplayOrder = 2, Label = new LocalizedText("Fyrkant", "Square"), ImageRef = "assets/img/shape-square.svg", IsCorrect = true },
+                            new() { DisplayOrder = 3, Label = new LocalizedText("Cirkel", "Circle"), ImageRef = "assets/img/shape-circle.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 3,
+                        Type = ExerciseType.DragToBucket,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Sortera formerna i rätt låda.",
+                            "Sort the shapes into the right box."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/math-sort-shapes.mp3",
+                            "assets/audio/en/math-sort-shapes.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Buckets = new List<Bucket>
+                        {
+                            new() { DisplayOrder = 1, Key = "circle", Label = new LocalizedText("Cirklar", "Circles"), ImageRef = "assets/img/shape-circle.svg" },
+                            new() { DisplayOrder = 2, Key = "square", Label = new LocalizedText("Fyrkanter", "Squares"), ImageRef = "assets/img/shape-square.svg" },
+                        },
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/shape-circle.svg", GroupKey = "circle" },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/shape-square.svg", GroupKey = "square" },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/shape-circle.svg", GroupKey = "circle" },
+                            new() { DisplayOrder = 4, ImageRef = "assets/img/shape-square.svg", GroupKey = "square" },
+                        },
+                    },
+                },
+            },
+            new()
+            {
+                DisplayOrder = 4,
+                DifficultyTier = 3,
+                AgeMin = 7,
+                AgeMax = 9,
+                Title = new LocalizedText("Plus", "Addition"),
+                Exercises = new List<Exercise>
+                {
+                    new()
+                    {
+                        DisplayOrder = 1,
+                        Type = ExerciseType.SimpleAddition,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Hur mycket är 2 + 1?",
+                            "What is 2 + 1?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/math-add-2-1.mp3",
+                            "assets/audio/en/math-add-2-1.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, Label = new LocalizedText("3", "3"), ImageRef = "assets/img/number-3.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, Label = new LocalizedText("2", "2"), ImageRef = "assets/img/number-2.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, Label = new LocalizedText("4", "4"), ImageRef = "assets/img/number-4.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 2,
+                        Type = ExerciseType.SimpleAddition,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Hur mycket är 3 + 2?",
+                            "What is 3 + 2?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/math-add-3-2.mp3",
+                            "assets/audio/en/math-add-3-2.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, Label = new LocalizedText("4", "4"), ImageRef = "assets/img/number-4.svg", IsCorrect = false },
+                            new() { DisplayOrder = 2, Label = new LocalizedText("5", "5"), ImageRef = "assets/img/number-5.svg", IsCorrect = true },
+                            new() { DisplayOrder = 3, Label = new LocalizedText("3", "3"), ImageRef = "assets/img/number-3.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 3,
+                        Type = ExerciseType.SimpleAddition,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Hur mycket är 1 + 3?",
+                            "What is 1 + 3?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/math-add-1-3.mp3",
+                            "assets/audio/en/math-add-1-3.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, Label = new LocalizedText("4", "4"), ImageRef = "assets/img/number-4.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, Label = new LocalizedText("3", "3"), ImageRef = "assets/img/number-3.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, Label = new LocalizedText("5", "5"), ImageRef = "assets/img/number-5.svg", IsCorrect = false },
                         },
                     },
                 },

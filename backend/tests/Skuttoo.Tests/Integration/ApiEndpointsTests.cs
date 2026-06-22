@@ -290,6 +290,115 @@ public sealed class ApiEndpointsTests : IClassFixture<SkuttooWebApplicationFacto
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
     }
 
+    [Fact]
+    public async Task Math_island_has_four_levels_spanning_ages_three_to_nine_with_all_types()
+    {
+        var client = _factory.CreateClient();
+
+        using var doc = JsonDocument.Parse(await client.GetStringAsync("/api/subjects/math"));
+        var levels = doc.RootElement.GetProperty("levels").EnumerateArray().ToList();
+
+        levels.Count.ShouldBeGreaterThanOrEqualTo(4);
+        levels.Min(l => l.GetProperty("ageMin").GetInt32()).ShouldBe(3);
+        levels.Max(l => l.GetProperty("ageMax").GetInt32()).ShouldBe(9);
+
+        // The four Math exercise types are all present across the island.
+        var types = new List<string>();
+        foreach (var level in levels)
+        {
+            var levelId = level.GetProperty("id").GetInt32();
+            using var levelDoc = JsonDocument.Parse(await client.GetStringAsync($"/api/levels/{levelId}"));
+            types.AddRange(levelDoc.RootElement.GetProperty("exercises").EnumerateArray()
+                .Select(e => e.GetProperty("type").GetString()!));
+        }
+
+        types.ShouldContain("countObjects");
+        types.ShouldContain("numberRecognition");
+        types.ShouldContain("shapeMatch");
+        types.ShouldContain("simpleAddition");
+    }
+
+    [Fact]
+    public async Task Get_simpleAddition_exercise_serves_without_leaking_isCorrect()
+    {
+        var client = _factory.CreateClient();
+        var exerciseId = await GetExerciseIdAsync(client, "math", levelOrder: 4, exerciseOrder: 1);
+
+        var raw = await client.GetStringAsync($"/api/exercises/{exerciseId}");
+        raw.ShouldNotContain("isCorrect", Case.Insensitive);
+
+        using var doc = JsonDocument.Parse(raw);
+        var root = doc.RootElement;
+        root.GetProperty("type").GetString().ShouldBe("simpleAddition");
+
+        // Math follows the UI language, so prompt audio is present in both locales.
+        root.GetProperty("promptAudio").GetProperty("sv").GetString().ShouldNotBeNullOrWhiteSpace();
+        root.GetProperty("promptAudio").GetProperty("en").GetString().ShouldNotBeNullOrWhiteSpace();
+
+        // Number answers carry a text label so they're accessible and selectable.
+        foreach (var choice in root.GetProperty("choices").EnumerateArray())
+        {
+            choice.GetProperty("label").GetProperty("sv").GetString().ShouldNotBeNullOrWhiteSpace();
+        }
+    }
+
+    [Fact]
+    public async Task Attempt_simpleAddition_rewards_correct_and_is_gentle_on_wrong()
+    {
+        var client = _factory.CreateClient();
+        var exerciseId = await GetExerciseIdAsync(client, "math", levelOrder: 4, exerciseOrder: 1);
+        var (correct, wrong) = await GetCorrectAndWrongChoiceAsync(client, exerciseId);
+
+        var ok = await client.PostAsJsonAsync($"/api/exercises/{exerciseId}/attempt", new { choiceId = correct });
+        using (var okDoc = JsonDocument.Parse(await ok.Content.ReadAsStringAsync()))
+        {
+            okDoc.RootElement.GetProperty("correct").GetBoolean().ShouldBeTrue();
+            okDoc.RootElement.GetProperty("reward").GetProperty("coins").GetInt32().ShouldBe(10);
+            okDoc.RootElement.GetProperty("reward").GetProperty("stars").GetInt32().ShouldBe(3);
+        }
+
+        var bad = await client.PostAsJsonAsync($"/api/exercises/{exerciseId}/attempt", new { choiceId = wrong });
+        using (var badDoc = JsonDocument.Parse(await bad.Content.ReadAsStringAsync()))
+        {
+            badDoc.RootElement.GetProperty("correct").GetBoolean().ShouldBeFalse();
+            badDoc.RootElement.GetProperty("reward").GetProperty("coins").GetInt32().ShouldBe(0);
+            badDoc.RootElement.GetProperty("correctChoiceId").GetInt32().ShouldBe(correct);
+        }
+    }
+
+    [Fact]
+    public async Task Get_shapeMatch_exercise_serves_localized_choices()
+    {
+        var client = _factory.CreateClient();
+        var exerciseId = await GetExerciseIdAsync(client, "math", levelOrder: 3, exerciseOrder: 1);
+
+        var raw = await client.GetStringAsync($"/api/exercises/{exerciseId}");
+        raw.ShouldNotContain("isCorrect", Case.Insensitive);
+
+        using var doc = JsonDocument.Parse(raw);
+        doc.RootElement.GetProperty("type").GetString().ShouldBe("shapeMatch");
+
+        var choices = doc.RootElement.GetProperty("choices").EnumerateArray().ToList();
+        choices.Select(c => c.GetProperty("label").GetProperty("sv").GetString()).ShouldContain("Cirkel");
+        choices.Select(c => c.GetProperty("label").GetProperty("en").GetString()).ShouldContain("Circle");
+    }
+
+    [Fact]
+    public async Task Attempt_shapeMatch_correct_returns_reward()
+    {
+        var client = _factory.CreateClient();
+        var exerciseId = await GetExerciseIdAsync(client, "math", levelOrder: 3, exerciseOrder: 1);
+        var (correct, _) = await GetCorrectAndWrongChoiceAsync(client, exerciseId);
+
+        var response = await client.PostAsJsonAsync($"/api/exercises/{exerciseId}/attempt", new { choiceId = correct });
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        doc.RootElement.GetProperty("correct").GetBoolean().ShouldBeTrue();
+        doc.RootElement.GetProperty("reward").GetProperty("coins").GetInt32().ShouldBe(10);
+        doc.RootElement.GetProperty("reward").GetProperty("stars").GetInt32().ShouldBe(3);
+    }
+
     /// <summary>Walks subject -> level (by display order) -> exercise (by display order) to an id.</summary>
     private static async Task<int> GetExerciseIdAsync(HttpClient client, string subjectKey, int levelOrder, int exerciseOrder)
     {
