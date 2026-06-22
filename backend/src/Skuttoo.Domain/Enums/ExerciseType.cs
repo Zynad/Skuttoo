@@ -12,4 +12,8 @@ public enum ExerciseType
     LetterSound,
     WordImageMatch,
     ListenPickWord,
+
+    // Generic interaction types (the engine's evaluation branches). Appended — do not reorder.
+    TapToMatch,
+    DragToBucket,
 }

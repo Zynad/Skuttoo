@@ -18,6 +18,7 @@ Content responses always include both locales so the client switches language of
 |---|---|---|
 | Id | int (PK) | |
 | Key | enum `SubjectKey` | `Math, Swedish, English, Logic` (unique) |
+| ContentLanguage | enum `Language?` | `Sv`/`En`, or null. The language this island teaches (English→`En`, Swedish→`Sv`); null = follow the child's UI language (Math, Logic). |
 | Name | LocalizedText | |
 | Description | LocalizedText | short, read-aloud intro |
 | ThemeKey | string | drives the island theme/colours (`--island-math`, …) |
@@ -40,8 +41,10 @@ Content responses always include both locales so the client switches language of
 | LevelId | int (FK→Level) | |
 | DisplayOrder | int | |
 | Type | enum `ExerciseType` | see below |
-| Prompt | LocalizedText | the question |
-| PromptAudio | LocalizedAudio | read-aloud prompt |
+| Prompt | LocalizedText | the **instruction**, shown/spoken in the UI language |
+| PromptAudio | LocalizedAudio | read-aloud instruction (UI language) |
+| Target | LocalizedText? | the **taught word** (language islands), rendered/spoken in the content language; null otherwise |
+| TargetAudio | LocalizedAudio? | audio for the taught word (the "listen" stimulus), content language |
 | ImageRef | string? | optional illustration |
 | RewardCoins | int | coins for first correct solve |
 | RewardStars | int | 1–3 stars |
@@ -56,6 +59,17 @@ Content responses always include both locales so the client switches language of
 | ImageRef | string? | for image choices (colors/shapes) |
 | Audio | LocalizedAudio? | optional |
 | IsCorrect | bool | **never serialized to the client** in normal content endpoints |
+| GroupKey | string? | **never serialized** — tap-to-match: two choices sharing a key form a pair; drag-to-bucket: the correct `Bucket.Key` |
+
+### Bucket  (drop target for drag-to-bucket exercises)
+| Field | Type | Notes |
+|---|---|---|
+| Id | int (PK) | |
+| ExerciseId | int (FK→Exercise) | |
+| DisplayOrder | int | |
+| Key | string | stable key choices reference via `Choice.GroupKey` (safe to serialize) |
+| Label | LocalizedText | |
+| ImageRef | string? | optional |
 
 ### Badge  (definition only; earning is client-side in MVP)
 | Field | Type | Notes |
@@ -72,10 +86,11 @@ Content responses always include both locales so the client switches language of
 
 ```
 Subject 1───* Level 1───* Exercise 1───* Choice
+                          Exercise 1───* Bucket   (drag-to-bucket only)
 Badge (standalone definitions)
 ```
 
-`ExerciseType` (extensible): `CountObjects, NumberRecognition, SimpleAddition, ShapeMatch, ColorMatch, PatternNext, LetterSound, WordImageMatch, ListenPickWord`.
+`ExerciseType` (extensible): `CountObjects, NumberRecognition, SimpleAddition, ShapeMatch, ColorMatch, PatternNext, LetterSound, WordImageMatch, ListenPickWord, TapToMatch, DragToBucket`. The content types all evaluate as single-correct-choice; `TapToMatch`/`DragToBucket` are the generic interaction types. The attempt endpoint accepts `{ choiceId }` (single choice) **or** `{ placements: [{ itemId, targetKey }] }` (match/bucket) and returns `{ correct, correctChoiceId?, reward, correctPlacements? }`.
 
 ## Client-side progress (IndexedDB, MVP)
 

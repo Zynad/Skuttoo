@@ -39,4 +39,14 @@ describe('AudioButton', () => {
     const utterance = speakSpy.mock.calls[0][0];
     expect(utterance.lang).toBe('sv-SE');
   });
+
+  it('speaks in the given content language even when the UI language differs', async () => {
+    const speakSpy = vi.spyOn(window.speechSynthesis, 'speak');
+    // UI is Swedish, but this button voices an English word (content language).
+    renderWithProviders(<AudioButton text="apple" lang="en" />, { lang: 'sv' });
+
+    await userEvent.click(screen.getByTestId('audio-button'));
+
+    expect(speakSpy.mock.calls[0][0].lang).toBe('en-US');
+  });
 });

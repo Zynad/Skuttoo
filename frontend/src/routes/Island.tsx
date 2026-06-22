@@ -61,11 +61,9 @@ export function Island() {
   const theme = islandThemes[validKey];
 
   const stateOf = (_level: Level, index: number): LevelState => {
-    // Slice rule: first level is the current playable stop; later levels locked.
-    if (index === 0) {
-      return 'current';
-    }
-    return 'locked';
+    // 1.1: all seeded levels are playable so every exercise type is reachable.
+    // Progressive locking/unlocking arrives with gamification (sub-phase 1.7).
+    return index === 0 ? 'current' : 'available';
   };
 
   return (

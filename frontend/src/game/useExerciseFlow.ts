@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import type { Choice, Exercise } from '../types/content';
+import type { AttemptRequest, Exercise, Placement } from '../types/content';
 import { contentApi, type ContentApi } from '../services/contentApi';
 import { useProgress } from '../hooks/useProgress';
 
@@ -11,10 +11,12 @@ export interface ExerciseFlowState {
   phase: FlowPhase;
   /** 1-based number of the attempt currently being made / just made. */
   attemptNumber: number;
-  /** Id of the chosen choice for the latest attempt (for styling). */
+  /** Id of the chosen choice for the latest single-choice attempt (for styling). */
   selectedChoiceId: number | null;
-  /** Id of the correct choice once known (correct answer or reveal). */
+  /** Id of the correct choice once known (correct answer or reveal); single-choice only. */
   correctChoiceId: number | null;
+  /** The correct mapping once known (correct answer or reveal); generic types only. */
+  correctPlacements: Placement[] | null;
   /** Coins awarded on the (first) correct solve. */
   awardedCoins: number;
   /** Stars awarded on the (first) correct solve. */
@@ -23,8 +25,8 @@ export interface ExerciseFlowState {
 }
 
 export interface UseExerciseFlowResult extends ExerciseFlowState {
-  /** Submit a choice; updates phase, progress and rewards. */
-  choose: (choice: Choice) => Promise<void>;
+  /** Submit an attempt (single choice or placements); updates phase, progress and rewards. */
+  submit: (payload: AttemptRequest) => Promise<void>;
 }
 
 /**
@@ -39,25 +41,26 @@ export function useExerciseFlow(exercise: Exercise, api: ContentApi = contentApi
     attemptNumber: 0,
     selectedChoiceId: null,
     correctChoiceId: null,
+    correctPlacements: null,
     awardedCoins: 0,
     awardedStars: 0,
     submitting: false,
   });
 
-  const choose = useCallback(
-    async (choice: Choice) => {
-      // Ignore taps once the exercise is resolved or while submitting.
+  const submit = useCallback(
+    async (payload: AttemptRequest) => {
+      // Ignore attempts once the exercise is resolved or while submitting.
       setState((prev) => {
         if (prev.phase === 'correct' || prev.phase === 'revealed' || prev.submitting) {
           return prev;
         }
-        return { ...prev, submitting: true, selectedChoiceId: choice.id };
+        return { ...prev, submitting: true, selectedChoiceId: payload.choiceId ?? null };
       });
 
       const attemptNumber = state.attemptNumber + 1;
 
       try {
-        const result = await api.submitAttempt(exercise.id, { choiceId: choice.id, attemptNumber });
+        const result = await api.submitAttempt(exercise.id, { ...payload, attemptNumber });
         const outcome = await recordAttempt({ exerciseId: exercise.id, attemptNumber, result });
 
         setState((prev) => {
@@ -67,6 +70,7 @@ export function useExerciseFlow(exercise: Exercise, api: ContentApi = contentApi
               phase: 'correct',
               attemptNumber,
               correctChoiceId: result.correctChoiceId,
+              correctPlacements: result.correctPlacements ?? null,
               awardedCoins: outcome.awardedCoins,
               awardedStars: outcome.awardedStars,
               submitting: false,
@@ -78,6 +82,7 @@ export function useExerciseFlow(exercise: Exercise, api: ContentApi = contentApi
             phase: reveal ? 'revealed' : 'wrong',
             attemptNumber,
             correctChoiceId: reveal ? result.correctChoiceId : null,
+            correctPlacements: reveal ? (result.correctPlacements ?? null) : null,
             submitting: false,
           };
         });
@@ -89,5 +94,5 @@ export function useExerciseFlow(exercise: Exercise, api: ContentApi = contentApi
     [api, exercise.id, recordAttempt, state.attemptNumber],
   );
 
-  return { ...state, choose };
+  return { ...state, submit };
 }

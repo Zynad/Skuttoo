@@ -11,6 +11,13 @@ public sealed class Subject
     /// <summary>Stable unique key driving routing and theming.</summary>
     public SubjectKey Key { get; set; }
 
+    /// <summary>
+    /// The language this island teaches (English island → En, Swedish island → Sv).
+    /// Null means "follow the child's UI language" (Math, Logic). Lets the client render
+    /// the taught words/audio in the target language while keeping instructions in the UI language.
+    /// </summary>
+    public Language? ContentLanguage { get; set; }
+
     public LocalizedText Name { get; set; } = new();
 
     /// <summary>Short, read-aloud intro.</summary>

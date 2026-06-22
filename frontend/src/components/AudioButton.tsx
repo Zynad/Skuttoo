@@ -1,5 +1,6 @@
 import { useT } from '../i18n/useT';
 import { useSpeak } from '../hooks/useSpeak';
+import type { Lang } from '../i18n/dictionaries';
 
 export interface AudioButtonProps {
   /** Text spoken by the SpeechSynthesis fallback. */
@@ -8,15 +9,18 @@ export interface AudioButtonProps {
   clip?: string | null;
   /** Visible label shown next to the icon (defaults to "Read aloud"). */
   label?: string;
+  /** Language to speak in; defaults to the active UI language (used for content audio). */
+  lang?: Lang;
   size?: 'md' | 'lg';
   className?: string;
 }
 
 /**
  * Round read-aloud button. Plays the pre-generated clip when present, otherwise
- * falls back to the browser SpeechSynthesis in the active language via useSpeak.
+ * falls back to the browser SpeechSynthesis. Pass `lang` to speak content in its
+ * own language (e.g. an English word) while the UI stays in another.
  */
-export function AudioButton({ text, clip, label, size = 'md', className = '' }: AudioButtonProps) {
+export function AudioButton({ text, clip, label, lang, size = 'md', className = '' }: AudioButtonProps) {
   const t = useT();
   const { say, speaking } = useSpeak();
   const visibleLabel = label ?? t('exercise.readAloud');
@@ -28,7 +32,7 @@ export function AudioButton({ text, clip, label, size = 'md', className = '' }: 
       data-testid="audio-button"
       aria-label={visibleLabel}
       aria-pressed={speaking}
-      onClick={() => void say(text, clip)}
+      onClick={() => void say(text, { clip, lang })}
       className={
         `inline-flex shrink-0 items-center justify-center rounded-full text-white ` +
         `bg-[var(--color-accent)] shadow-[var(--shadow-soft)] border-b-4 border-[var(--color-warn)] ` +

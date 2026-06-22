@@ -19,6 +19,9 @@ public sealed class SkuttooSeeder(SkuttooDbContext db)
             .Include(s => s.Levels)
                 .ThenInclude(l => l.Exercises)
                     .ThenInclude(e => e.Choices)
+            .Include(s => s.Levels)
+                .ThenInclude(l => l.Exercises)
+                    .ThenInclude(e => e.Buckets)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
@@ -43,6 +46,7 @@ public sealed class SkuttooSeeder(SkuttooDbContext db)
         target.Description = seed.Description;
         target.ThemeKey = seed.ThemeKey;
         target.DisplayOrder = seed.DisplayOrder;
+        target.ContentLanguage = seed.ContentLanguage;
 
         foreach (var seedLevel in seed.Levels)
         {
@@ -82,6 +86,8 @@ public sealed class SkuttooSeeder(SkuttooDbContext db)
         target.Type = seed.Type;
         target.Prompt = seed.Prompt;
         target.PromptAudio = seed.PromptAudio;
+        target.Target = seed.Target;
+        target.TargetAudio = seed.TargetAudio;
         target.ImageRef = seed.ImageRef;
         target.RewardCoins = seed.RewardCoins;
         target.RewardStars = seed.RewardStars;
@@ -99,6 +105,21 @@ public sealed class SkuttooSeeder(SkuttooDbContext db)
             choice.ImageRef = seedChoice.ImageRef;
             choice.Audio = seedChoice.Audio;
             choice.IsCorrect = seedChoice.IsCorrect;
+            choice.GroupKey = seedChoice.GroupKey;
+        }
+
+        foreach (var seedBucket in seed.Buckets)
+        {
+            var bucket = target.Buckets.FirstOrDefault(x => x.DisplayOrder == seedBucket.DisplayOrder);
+            if (bucket is null)
+            {
+                target.Buckets.Add(seedBucket);
+                continue;
+            }
+
+            bucket.Key = seedBucket.Key;
+            bucket.Label = seedBucket.Label;
+            bucket.ImageRef = seedBucket.ImageRef;
         }
     }
 }

@@ -24,4 +24,11 @@ public sealed class Choice
 
     /// <summary>Whether this is the correct answer. NEVER serialized to clients.</summary>
     public bool IsCorrect { get; set; }
+
+    /// <summary>
+    /// Grouping key for the generic exercise types — NEVER serialized to clients (it is the answer).
+    /// tap-to-match: two choices sharing a <c>GroupKey</c> form a correct pair.
+    /// drag-to-bucket: the <c>Bucket.Key</c> this choice belongs in.
+    /// </summary>
+    public string? GroupKey { get; set; }
 }

@@ -164,6 +164,171 @@ public sealed class ApiEndpointsTests : IClassFixture<SkuttooWebApplicationFacto
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
+    [Fact]
+    public async Task Get_subjects_surfaces_contentLanguage_per_island()
+    {
+        var client = _factory.CreateClient();
+
+        using var doc = JsonDocument.Parse(await client.GetStringAsync("/api/subjects"));
+        var array = doc.RootElement;
+
+        string? LangOf(string key) => array.EnumerateArray()
+            .First(s => s.GetProperty("key").GetString() == key)
+            .GetProperty("contentLanguage").ValueKind == JsonValueKind.Null
+            ? null
+            : array.EnumerateArray().First(s => s.GetProperty("key").GetString() == key)
+                .GetProperty("contentLanguage").GetString();
+
+        LangOf("english").ShouldBe("en");
+        LangOf("swedish").ShouldBe("sv");
+
+        // Math/Logic follow the UI language: contentLanguage is present and JSON null.
+        var math = array.EnumerateArray().First(s => s.GetProperty("key").GetString() == "math");
+        math.GetProperty("contentLanguage").ValueKind.ShouldBe(JsonValueKind.Null);
+    }
+
+    [Fact]
+    public async Task Get_english_exercise_uses_ui_instruction_and_english_target()
+    {
+        var client = _factory.CreateClient();
+        var exerciseId = await GetExerciseIdAsync(client, "english", levelOrder: 1, exerciseOrder: 1);
+
+        using var doc = JsonDocument.Parse(await client.GetStringAsync($"/api/exercises/{exerciseId}"));
+        var root = doc.RootElement;
+
+        // The subject's content language is surfaced for the client to resolve.
+        root.GetProperty("contentLanguage").GetString().ShouldBe("en");
+        root.GetProperty("subjectKey").GetString().ShouldBe("english");
+
+        // Instruction (prompt) carries both UI locales and no longer bakes in the taught word.
+        var promptSv = root.GetProperty("prompt").GetProperty("sv").GetString();
+        promptSv.ShouldNotBeNullOrWhiteSpace();
+        promptSv!.ShouldNotContain("äpple");
+
+        // The taught word lives in target (English) + its own audio.
+        root.GetProperty("target").GetProperty("en").GetString().ShouldBe("apple");
+        root.GetProperty("targetAudio").GetProperty("en").GetString().ShouldNotBeNullOrWhiteSpace();
+
+        // Answer labels are the English words.
+        var labels = root.GetProperty("choices").EnumerateArray()
+            .Select(c => c.GetProperty("label").GetProperty("en").GetString())
+            .ToList();
+        labels.ShouldContain("apple");
+    }
+
+    [Fact]
+    public async Task Get_dragToBucket_exercise_returns_buckets_without_leaking_answer()
+    {
+        var client = _factory.CreateClient();
+        var exerciseId = await GetExerciseIdAsync(client, "english", levelOrder: 3, exerciseOrder: 1);
+
+        var raw = await client.GetStringAsync($"/api/exercises/{exerciseId}");
+        raw.ShouldNotContain("isCorrect", Case.Insensitive);
+        raw.ShouldNotContain("groupKey", Case.Insensitive);
+
+        using var doc = JsonDocument.Parse(raw);
+        doc.RootElement.GetProperty("type").GetString().ShouldBe("dragToBucket");
+        var buckets = doc.RootElement.GetProperty("buckets");
+        buckets.GetArrayLength().ShouldBe(2);
+        foreach (var bucket in buckets.EnumerateArray())
+        {
+            bucket.GetProperty("key").GetString().ShouldNotBeNullOrWhiteSpace();
+            bucket.GetProperty("label").GetProperty("en").GetString().ShouldNotBeNullOrWhiteSpace();
+        }
+    }
+
+    [Fact]
+    public async Task Attempt_dragToBucket_correct_placements_returns_reward()
+    {
+        var client = _factory.CreateClient();
+        var exerciseId = await GetExerciseIdAsync(client, "english", levelOrder: 3, exerciseOrder: 1);
+        var correct = await GetRevealedPlacementsAsync(client, exerciseId);
+
+        var response = await client.PostAsJsonAsync(
+            $"/api/exercises/{exerciseId}/attempt",
+            new { placements = correct });
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        doc.RootElement.GetProperty("correct").GetBoolean().ShouldBeTrue();
+        doc.RootElement.GetProperty("reward").GetProperty("coins").GetInt32().ShouldBe(10);
+        doc.RootElement.GetProperty("reward").GetProperty("stars").GetInt32().ShouldBe(3);
+    }
+
+    [Fact]
+    public async Task Attempt_tapToMatch_correct_pairs_returns_reward()
+    {
+        var client = _factory.CreateClient();
+        var exerciseId = await GetExerciseIdAsync(client, "english", levelOrder: 2, exerciseOrder: 1);
+
+        using var doc = JsonDocument.Parse(await client.GetStringAsync($"/api/exercises/{exerciseId}"));
+        doc.RootElement.GetProperty("type").GetString().ShouldBe("tapToMatch");
+
+        // The reveal gives each item its group key; use the group key as the client's pair id.
+        var correct = await GetRevealedPlacementsAsync(client, exerciseId);
+
+        var response = await client.PostAsJsonAsync(
+            $"/api/exercises/{exerciseId}/attempt",
+            new { placements = correct });
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        using var resultDoc = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        resultDoc.RootElement.GetProperty("correct").GetBoolean().ShouldBeTrue();
+        resultDoc.RootElement.GetProperty("reward").GetProperty("coins").GetInt32().ShouldBe(10);
+    }
+
+    [Fact]
+    public async Task Attempt_dragToBucket_without_placements_returns_400()
+    {
+        var client = _factory.CreateClient();
+        var exerciseId = await GetExerciseIdAsync(client, "english", levelOrder: 3, exerciseOrder: 1);
+
+        var response = await client.PostAsJsonAsync(
+            $"/api/exercises/{exerciseId}/attempt",
+            new { choiceId = 1 });
+
+        response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+    }
+
+    /// <summary>Walks subject -> level (by display order) -> exercise (by display order) to an id.</summary>
+    private static async Task<int> GetExerciseIdAsync(HttpClient client, string subjectKey, int levelOrder, int exerciseOrder)
+    {
+        using var subjectDoc = JsonDocument.Parse(await client.GetStringAsync($"/api/subjects/{subjectKey}"));
+        var levelId = subjectDoc.RootElement.GetProperty("levels").EnumerateArray()
+            .First(l => l.GetProperty("displayOrder").GetInt32() == levelOrder)
+            .GetProperty("id").GetInt32();
+
+        using var levelDoc = JsonDocument.Parse(await client.GetStringAsync($"/api/levels/{levelId}"));
+        return levelDoc.RootElement.GetProperty("exercises").EnumerateArray()
+            .First(e => e.GetProperty("displayOrder").GetInt32() == exerciseOrder)
+            .GetProperty("id").GetInt32();
+    }
+
+    /// <summary>
+    /// Probes a placement-based exercise to learn the correct mapping from the attempt response
+    /// (the answer key is never on the GET), then returns it as a submit-ready placement list.
+    /// </summary>
+    private static async Task<List<object>> GetRevealedPlacementsAsync(HttpClient client, int exerciseId)
+    {
+        using var exerciseDoc = JsonDocument.Parse(await client.GetStringAsync($"/api/exercises/{exerciseId}"));
+        var itemIds = exerciseDoc.RootElement.GetProperty("choices").EnumerateArray()
+            .Select(c => c.GetProperty("id").GetInt32())
+            .ToList();
+
+        var probe = await client.PostAsJsonAsync(
+            $"/api/exercises/{exerciseId}/attempt",
+            new { placements = itemIds.Select(id => new { itemId = id, targetKey = "probe" }).ToArray() });
+
+        using var probeDoc = JsonDocument.Parse(await probe.Content.ReadAsStringAsync());
+        return probeDoc.RootElement.GetProperty("correctPlacements").EnumerateArray()
+            .Select(p => (object)new
+            {
+                itemId = p.GetProperty("itemId").GetInt32(),
+                targetKey = p.GetProperty("targetKey").GetString(),
+            })
+            .ToList();
+    }
+
     private static async Task<int> GetFirstMathExerciseIdAsync(HttpClient client)
     {
         using var subjectDoc = JsonDocument.Parse(await client.GetStringAsync("/api/subjects/math"));

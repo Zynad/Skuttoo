@@ -11,4 +11,5 @@ public sealed record SubjectDetailDto(
     LocalizedText Description,
     string ThemeKey,
     int DisplayOrder,
+    Language? ContentLanguage,
     IReadOnlyList<LevelDto> Levels);

@@ -4,8 +4,8 @@ namespace Skuttoo.Api.Middleware;
 
 /// <summary>
 /// Maps domain exceptions to RFC 7807 ProblemDetails:
-/// <see cref="NotFoundException"/> -> 404, anything unhandled -> 500.
-/// Never leaks stack traces to clients.
+/// <see cref="NotFoundException"/> -> 404, <see cref="InvalidAttemptException"/> -> 400,
+/// anything unhandled -> 500. Never leaks stack traces to clients.
 /// </summary>
 public sealed class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
 {
@@ -22,6 +22,12 @@ public sealed class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Ex
         {
             _logger.LogInformation(ex, "Resource not found: {Message}", ex.Message);
             await WriteProblemAsync(context, problemDetails, StatusCodes.Status404NotFound, "Not Found", ex.Message)
+                .ConfigureAwait(false);
+        }
+        catch (InvalidAttemptException ex)
+        {
+            _logger.LogInformation(ex, "Invalid attempt: {Message}", ex.Message);
+            await WriteProblemAsync(context, problemDetails, StatusCodes.Status400BadRequest, "Bad Request", ex.Message)
                 .ConfigureAwait(false);
         }
         catch (Exception ex)

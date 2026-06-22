@@ -30,7 +30,8 @@ The **Logic** island is deliberately image- and audio-only so the youngest can p
 ## Bilingual authoring
 
 - Every user-facing field is a `LocalizedText { sv, en }`; both must be filled. A test enforces sv/en key parity on the frontend i18n dictionaries; seed content must include both languages.
-- Some content is **language-specific by nature**: the Swedish island teaches Swedish letters/sounds; the English island teaches English words. These exercises still carry both UI/instruction locales (so a Swedish child gets Swedish instructions while learning English words, and vice versa).
+- Some content is **language-specific by nature**: the Swedish island teaches Swedish letters/sounds; the English island teaches English words. This is modelled with a per-subject **content language** (`Subject.ContentLanguage`): the exercise **instruction** (`Exercise.Prompt`) renders in the child's UI language, while the **taught word** (`Exercise.Target` + `TargetAudio`) and the **answer labels** render in the content language. So a Swedish child on the English island gets Swedish instructions while hearing/seeing English words; Math/Logic leave `ContentLanguage` null and follow the UI language.
+- **Interaction types:** beyond single-choice exercises, the engine supports **tap-to-match** (pair items sharing a hidden `Choice.GroupKey`) and **drag-to-bucket** (place each item into the `Bucket` its `GroupKey` names). Correctness is always evaluated server-side; the grouping keys are never serialized.
 - Keep copy short, warm and concrete (see `DESIGN.md` voice & tone).
 
 ## Audio

@@ -25,6 +25,18 @@ internal static class LocalizedJsonConverters
             v => v == null ? 0 : v.GetHashCode(),
             v => v);
 
+    // Target text is nullable on Exercise; store null as a real SQL NULL by only serializing non-null.
+    public static readonly ValueConverter<LocalizedText?, string?> LocalizedTextNullable =
+        new(
+            v => v == null ? null : JsonSerializer.Serialize(v, Options),
+            v => v == null ? null : JsonSerializer.Deserialize<LocalizedText>(v, Options));
+
+    public static readonly ValueComparer<LocalizedText?> LocalizedTextNullableComparer =
+        new(
+            (a, b) => a == b,
+            v => v == null ? 0 : v.GetHashCode(),
+            v => v);
+
     // Audio is nullable on Choice; store null as a real SQL NULL by only serializing non-null.
     public static readonly ValueConverter<LocalizedAudio?, string?> LocalizedAudioNullable =
         new(

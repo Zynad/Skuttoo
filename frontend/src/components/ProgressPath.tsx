@@ -3,7 +3,7 @@ import type { Lang } from '../i18n/dictionaries';
 import type { IslandTheme } from '../utils/islandTheme';
 import { useT } from '../i18n/useT';
 
-export type LevelState = 'completed' | 'current' | 'locked';
+export type LevelState = 'completed' | 'current' | 'available' | 'locked';
 
 export interface ProgressPathProps {
   levels: Level[];

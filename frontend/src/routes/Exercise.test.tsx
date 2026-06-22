@@ -14,12 +14,17 @@ const mockExercise: ExerciseModel = {
   type: 'countObjects',
   prompt: { sv: 'Hur många äpplen?', en: 'How many apples?' },
   promptAudio: { sv: null, en: null },
+  target: null,
+  targetAudio: null,
   imageRef: 'assets/img/apples-3.svg',
+  subjectKey: 'math',
+  contentLanguage: null,
   choices: [
     { id: 1, displayOrder: 1, label: { sv: '2', en: '2' }, imageRef: null, audio: null },
     { id: 2, displayOrder: 2, label: { sv: '3', en: '3' }, imageRef: null, audio: null },
     { id: 3, displayOrder: 3, label: { sv: '4', en: '4' }, imageRef: null, audio: null },
   ],
+  buckets: [],
 };
 
 describe('Exercise route', () => {

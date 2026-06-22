@@ -10,4 +10,5 @@ public sealed record SubjectDto(
     LocalizedText Name,
     LocalizedText Description,
     string ThemeKey,
-    int DisplayOrder);
+    int DisplayOrder,
+    Language? ContentLanguage);

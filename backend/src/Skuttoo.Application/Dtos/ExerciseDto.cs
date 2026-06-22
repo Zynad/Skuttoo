@@ -3,7 +3,7 @@ using Skuttoo.Domain.ValueObjects;
 
 namespace Skuttoo.Application.Dtos;
 
-/// <summary>An exercise for play. Choices deliberately omit IsCorrect.</summary>
+/// <summary>An exercise for play. Choices deliberately omit IsCorrect/GroupKey.</summary>
 public sealed record ExerciseDto(
     int Id,
     int LevelId,
@@ -11,5 +11,10 @@ public sealed record ExerciseDto(
     ExerciseType Type,
     LocalizedText Prompt,
     LocalizedAudio PromptAudio,
+    LocalizedText? Target,
+    LocalizedAudio? TargetAudio,
     string? ImageRef,
-    IReadOnlyList<ChoiceDto> Choices);
+    SubjectKey SubjectKey,
+    Language? ContentLanguage,
+    IReadOnlyList<ChoiceDto> Choices,
+    IReadOnlyList<BucketDto> Buckets);

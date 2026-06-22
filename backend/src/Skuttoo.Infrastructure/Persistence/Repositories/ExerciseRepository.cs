@@ -13,6 +13,9 @@ public sealed class ExerciseRepository(SkuttooDbContext db) : IExerciseRepositor
         return await _db.Exercises
             .AsNoTracking()
             .Include(e => e.Choices.OrderBy(c => c.DisplayOrder))
+            .Include(e => e.Buckets.OrderBy(x => x.DisplayOrder))
+            .Include(e => e.Level!)
+                .ThenInclude(l => l.Subject)
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken)
             .ConfigureAwait(false);
     }

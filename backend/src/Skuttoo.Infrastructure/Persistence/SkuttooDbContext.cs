@@ -15,6 +15,8 @@ public sealed class SkuttooDbContext(DbContextOptions<SkuttooDbContext> options)
 
     public DbSet<Choice> Choices => Set<Choice>();
 
+    public DbSet<Bucket> Buckets => Set<Bucket>();
+
     public DbSet<Badge> Badges => Set<Badge>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,6 +29,8 @@ public sealed class SkuttooDbContext(DbContextOptions<SkuttooDbContext> options)
             b.Property(s => s.Key).HasConversion<string>();
             b.HasIndex(s => s.Key).IsUnique();
             b.Property(s => s.ThemeKey).HasMaxLength(64).IsRequired();
+            // Nullable enum -> nullable TEXT ("Sv"/"En"/NULL).
+            b.Property(s => s.ContentLanguage).HasConversion<string>().HasMaxLength(8);
 
             b.Property(s => s.Name)
                 .HasConversion(LocalizedJsonConverters.LocalizedText, LocalizedJsonConverters.LocalizedTextComparer)
@@ -64,10 +68,21 @@ public sealed class SkuttooDbContext(DbContextOptions<SkuttooDbContext> options)
             b.Property(e => e.PromptAudio)
                 .HasConversion(LocalizedJsonConverters.LocalizedAudio, LocalizedJsonConverters.LocalizedAudioComparer)
                 .HasColumnType("TEXT");
+            b.Property(e => e.Target)
+                .HasConversion(LocalizedJsonConverters.LocalizedTextNullable, LocalizedJsonConverters.LocalizedTextNullableComparer)
+                .HasColumnType("TEXT");
+            b.Property(e => e.TargetAudio)
+                .HasConversion(LocalizedJsonConverters.LocalizedAudioNullable, LocalizedJsonConverters.LocalizedAudioNullableComparer)
+                .HasColumnType("TEXT");
 
             b.HasMany(e => e.Choices)
                 .WithOne(c => c.Exercise!)
                 .HasForeignKey(c => c.ExerciseId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            b.HasMany(e => e.Buckets)
+                .WithOne(x => x.Exercise!)
+                .HasForeignKey(x => x.ExerciseId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
@@ -79,6 +94,16 @@ public sealed class SkuttooDbContext(DbContextOptions<SkuttooDbContext> options)
                 .HasColumnType("TEXT");
             b.Property(c => c.Audio)
                 .HasConversion(LocalizedJsonConverters.LocalizedAudioNullable, LocalizedJsonConverters.LocalizedAudioNullableComparer)
+                .HasColumnType("TEXT");
+            b.Property(c => c.GroupKey).HasMaxLength(64);
+        });
+
+        modelBuilder.Entity<Bucket>(b =>
+        {
+            b.HasKey(x => x.Id);
+            b.Property(x => x.Key).HasMaxLength(64).IsRequired();
+            b.Property(x => x.Label)
+                .HasConversion(LocalizedJsonConverters.LocalizedText, LocalizedJsonConverters.LocalizedTextComparer)
                 .HasColumnType("TEXT");
         });
 
