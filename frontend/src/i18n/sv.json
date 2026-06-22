@@ -12,6 +12,7 @@
   "worldmap.subtitle": "Vart vill du hoppa idag?",
   "worldmap.mascotGreeting": "Hej! Jag är Skutt. Välj en ö så hoppar vi dit!",
   "worldmap.enterIsland": "Åk till {island}",
+  "worldmap.next": "Härnäst: {island}! Nu hoppar vi dit.",
   "coins.label": "mynt",
   "stars.label": "stjärnor",
   "coins.aria": "Du har {count} mynt",

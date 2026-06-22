@@ -28,9 +28,9 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
-      - run: dotnet restore backend/Skuttoo.sln
-      - run: dotnet build backend/Skuttoo.sln -c Release --no-restore
-      - run: dotnet test backend/Skuttoo.sln -c Release --no-build --verbosity normal
+      - run: dotnet restore backend/Skuttoo.slnx
+      - run: dotnet build backend/Skuttoo.slnx -c Release --no-restore
+      - run: dotnet test backend/Skuttoo.slnx -c Release --no-build --verbosity normal
 
   frontend:
     name: Frontend (lint + test + build)

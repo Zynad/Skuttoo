@@ -16,7 +16,19 @@ public static partial class ContentMapper
 
     public static partial SubjectDetailDto ToDetailDto(Subject subject);
 
-    public static partial LevelDto ToDto(Level level);
+    /// <summary>
+    /// Hand-written so the level carries its exercise ids (answer-safe) for client-side progress.
+    /// Mapperly uses this as the Level→LevelDto mapping when projecting <c>Subject.Levels</c>.
+    /// </summary>
+    public static LevelDto ToDto(Level level) => new(
+        level.Id,
+        level.SubjectId,
+        level.DisplayOrder,
+        level.Title,
+        level.DifficultyTier,
+        level.AgeMin,
+        level.AgeMax,
+        level.Exercises.OrderBy(e => e.DisplayOrder).Select(e => e.Id).ToList());
 
     public static partial LevelDetailDto ToDetailDto(Level level);
 

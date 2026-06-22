@@ -11,7 +11,7 @@ Legend: ✅ done · 🔧 in progress · ⬜ todo.
 | # | Sub-phase | Done when |
 |---|---|---|
 | 0.1 ✅ | **Planning docs** | `CLAUDE.md`, `README.md` and `docs/*` exist and agree on stack, conventions, data model and test strategy. |
-| 0.2 ✅ | **Backend skeleton + tests** | `Skuttoo.sln` builds; Api serves `/health` and `/docs`; EF Core/SQLite wired with an initial migration; `dotnet test` green (a smoke integration test via `WebApplicationFactory`). |
+| 0.2 ✅ | **Backend skeleton + tests** | `Skuttoo.slnx` builds; Api serves `/health` and `/docs`; EF Core/SQLite wired with an initial migration; `dotnet test` green (a smoke integration test via `WebApplicationFactory`). |
 | 0.3 ✅ | **Frontend skeleton + tests** | Vite/React/TS app builds and lints; Tailwind tokens + i18n (sv/en) + `BaseApi` in place; a placeholder world map renders; `npm test` green (incl. sv/en key-parity test). |
 | 0.4 ✅ | **Vertical slice + E2E** | One counting exercise works end-to-end: seeded content → `GET /api/exercises/{id}` + `POST .../attempt` → exercise screen with TTS read-aloud, answer, reward animation, local progress. Backend integration test + Playwright mobile E2E green. |
 | 0.5 ✅ | **Infra, Docker, CI/CD, secrets** | `Dockerfile` + `compose.yaml` run the full app; `infra/deploy.bicep` adds a second web app to the existing plan; `.github/workflows/deploy.yml` (OIDC) builds frontend→wwwroot→publish→deploy; `.gitignore`/`.env.example`/secret-scan in place; repo verified secret-free. |
@@ -27,11 +27,11 @@ Each island sub-phase reuses the same engine and adds its exercise types + seede
 | # | Sub-phase | Done when |
 |---|---|---|
 | 1.1 ✅ | **Content engine & exercise framework** | Generic exercise runner supporting multiple exercise types (multiple-choice, tap-to-match, drag-to-bucket), difficulty/levels, seeded from DB; per-type unit + E2E. Also introduced **content language** (`Subject.ContentLanguage`) so language islands teach in the target language while instructions stay in the child's UI language. |
-| 1.2 ✅ | **Math island** | Counting, number recognition, simple addition, shapes; 4 levels (tiers 1–3) spanning ages 3–9; seeded bilingual content with audio path references (real Azure TTS clips deferred to 1.8 — `SpeechSynthesis` fallback meanwhile); backend integration tests + Playwright E2E for the addition & shape flows. |
-| 1.3 ⬜ | **Logic & shapes/colors island** | Sorting, patterns, colors, shapes — image-only, works for non-readers (3–5); tests. |
-| 1.4 ⬜ | **Swedish island** | Letter sounds, picture↔word matching, first reading; leans on TTS; tests. |
-| 1.5 ⬜ | **English island** | Listen-and-pick words/phrases; uses the bilingual setup; tests. |
-| 1.6 ⬜ | **World map & navigation** | Mascot-guided map of islands with progress path; per-island themes; route + transitions; tests. |
+| 1.2 ✅ | **Math island** | Counting, number recognition, simple addition, shapes; 5 levels (tiers 1–3) spanning ages 3–9; seeded bilingual content with audio path references (real Azure TTS clips deferred to 1.8 — `SpeechSynthesis` fallback meanwhile); backend integration tests + Playwright E2E for the addition & shape flows. (Enriched alongside 1.3–1.5.) |
+| 1.3 ✅ | **Logic & shapes/colors island** | Colors, sorting, shapes and patterns across 5 levels — image-only, works for non-readers (3–6). `PatternNext` reuses single-choice (the sequence is a composite `pattern-*.svg`, choices are the candidate next swatches). Seed-integrity + integration tests + Playwright E2E (shape match, pattern next). |
+| 1.4 ✅ | **Swedish island** | Picture↔word matching, letter sounds, tap-to-match and first reading across 5 levels (`ContentLanguage = Sv`); `LetterSound` reuses single-choice (hear the word, pick the starting letter). Integration tests + Playwright E2E (letter sound, first reading). |
+| 1.5 ✅ | **English island** | Listen-and-pick words, matching, sorting and short phrases ("three apples") across 5 levels (`ContentLanguage = En`); phrases reuse the existing `apples-N` pictures. Integration tests + Playwright E2E (phrase pick, listen-and-pick word). |
+| 1.6 ✅ | **World map & navigation** | Illustrated winding trail of island nodes (per-island themes + earned-star progress) with Skutt guiding the child to the next stop; the island path reflects real completion (completed/current/available, no locks — locking stays in 1.7); framer-motion route transitions honouring `prefers-reduced-motion`. Backend exposes per-level `exerciseIds`; progress is attributed by island/level. Unit + integration + Playwright E2E (map progress + transitions). |
 | 1.7 ⬜ | **Gamification** | Coins, stars, badges, daily streak, simple reward shop / unlockables; all client-side for MVP; tests. |
 | 1.8 ⬜ | **Mascot & audio polish** | Mascot reactions/animations, full pre-generated TTS for all content, `prefers-reduced-motion` respected; tests. |
 | 1.9 ⬜ | **PWA & offline** | Installable; service worker caches app shell + content + audio; offline play of downloaded islands; tests. |

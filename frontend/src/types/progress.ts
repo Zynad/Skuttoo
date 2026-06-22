@@ -3,6 +3,8 @@
  * the child yet; these shape the local store and the future Phase 2 server tables.
  */
 
+import type { SubjectKey } from './content';
+
 export type AgeBand = '3-5' | '6-9';
 
 export interface Streak {
@@ -18,6 +20,10 @@ export interface ExerciseResult {
   attempts: number;
   /** ISO timestamp. */
   lastPlayedAt: string;
+  /** Owning island/level — lets the map summarise progress without re-fetching content.
+   * Optional for backward compatibility with profiles saved before attribution existed. */
+  subjectKey?: SubjectKey;
+  levelId?: number;
 }
 
 export interface Profile {

@@ -61,7 +61,13 @@ export function useExerciseFlow(exercise: Exercise, api: ContentApi = contentApi
 
       try {
         const result = await api.submitAttempt(exercise.id, { ...payload, attemptNumber });
-        const outcome = await recordAttempt({ exerciseId: exercise.id, attemptNumber, result });
+        const outcome = await recordAttempt({
+          exerciseId: exercise.id,
+          attemptNumber,
+          result,
+          subjectKey: exercise.subjectKey,
+          levelId: exercise.levelId,
+        });
 
         setState((prev) => {
           if (result.correct) {
@@ -91,7 +97,7 @@ export function useExerciseFlow(exercise: Exercise, api: ContentApi = contentApi
         setState((prev) => ({ ...prev, submitting: false, selectedChoiceId: null }));
       }
     },
-    [api, exercise.id, recordAttempt, state.attemptNumber],
+    [api, exercise.id, exercise.subjectKey, exercise.levelId, recordAttempt, state.attemptNumber],
   );
 
   return { ...state, submit };

@@ -1,4 +1,4 @@
-import type { AttemptResult } from '../types/content';
+import type { AttemptResult, SubjectKey } from '../types/content';
 import type { Profile } from '../types/progress';
 
 /** Local-date (YYYY-MM-DD) helper for streak tracking. */
@@ -32,6 +32,9 @@ export interface ApplyAttemptOptions {
   exerciseId: number;
   attemptNumber: number;
   result: AttemptResult;
+  /** Owning island/level, stored on the result for map-level progress (optional). */
+  subjectKey?: SubjectKey;
+  levelId?: number;
   now?: Date;
 }
 
@@ -51,7 +54,7 @@ export interface ApplyAttemptOutcome {
  * daily streak. Pure: returns a new Profile, never mutates the input.
  */
 export function applyAttempt(profile: Profile, options: ApplyAttemptOptions): ApplyAttemptOutcome {
-  const { exerciseId, attemptNumber, result, now } = options;
+  const { exerciseId, attemptNumber, result, subjectKey, levelId, now } = options;
   const today = todayIso(now);
   const timestamp = (now ?? new Date()).toISOString();
 
@@ -68,6 +71,9 @@ export function applyAttempt(profile: Profile, options: ApplyAttemptOptions): Ap
     starsEarned: Math.max(existing?.starsEarned ?? 0, firstSolve ? result.reward.stars : 0),
     attempts: (existing?.attempts ?? 0) + 1,
     lastPlayedAt: timestamp,
+    // Keep any previously recorded attribution; fill it in from this attempt when available.
+    subjectKey: existing?.subjectKey ?? subjectKey,
+    levelId: existing?.levelId ?? levelId,
   };
 
   const results = existing

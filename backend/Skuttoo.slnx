@@ -1,0 +1,16 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/Skuttoo.Api/Skuttoo.Api.csproj" />
+    <Project Path="src/Skuttoo.Application/Skuttoo.Application.csproj" />
+    <Project Path="src/Skuttoo.Domain/Skuttoo.Domain.csproj" />
+    <Project Path="src/Skuttoo.Infrastructure/Skuttoo.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Skuttoo.Tests/Skuttoo.Tests.csproj" />
+  </Folder>
+</Solution>

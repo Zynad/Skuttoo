@@ -35,8 +35,8 @@ export function ProgressProvider({ children }: ProgressProviderProps) {
   }, [setProfileSynced]);
 
   const recordAttempt = useCallback(
-    async ({ exerciseId, attemptNumber, result }: RecordAttemptArgs): Promise<ApplyAttemptOutcome> => {
-      const outcome = applyAttempt(profileRef.current, { exerciseId, attemptNumber, result });
+    async ({ exerciseId, attemptNumber, result, subjectKey, levelId }: RecordAttemptArgs): Promise<ApplyAttemptOutcome> => {
+      const outcome = applyAttempt(profileRef.current, { exerciseId, attemptNumber, result, subjectKey, levelId });
       setProfileSynced(outcome.profile);
       await saveProfile(outcome.profile);
       return outcome;

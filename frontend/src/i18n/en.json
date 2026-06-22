@@ -12,6 +12,7 @@
   "worldmap.subtitle": "Where do you want to hop today?",
   "worldmap.mascotGreeting": "Hi! I'm Skutt. Pick an island and we'll hop there!",
   "worldmap.enterIsland": "Go to {island}",
+  "worldmap.next": "Next up: {island}! Let's hop there.",
   "coins.label": "coins",
   "stars.label": "stars",
   "coins.aria": "You have {count} coins",

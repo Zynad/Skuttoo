@@ -52,6 +52,8 @@ export interface Level {
   difficultyTier: number;
   ageMin: number;
   ageMax: number;
+  /** Ids of this level's exercises, so the client can show real per-level progress. */
+  exerciseIds: number[];
 }
 
 export interface SubjectDetail extends Subject {
@@ -65,7 +67,8 @@ export interface ExerciseSummary {
   type: ExerciseType;
 }
 
-export interface LevelDetail extends Level {
+/** A level with full exercise summaries (from GET /levels/{id}); no separate exerciseIds field. */
+export interface LevelDetail extends Omit<Level, 'exerciseIds'> {
   exercises: ExerciseSummary[];
 }
 

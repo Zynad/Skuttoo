@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import type { AttemptResult } from '../types/content';
+import type { AttemptResult, SubjectKey } from '../types/content';
 import type { Profile } from '../types/progress';
 import type { ApplyAttemptOutcome } from '../utils/progressLogic';
 
@@ -7,6 +7,9 @@ export interface RecordAttemptArgs {
   exerciseId: number;
   attemptNumber: number;
   result: AttemptResult;
+  /** Owning island/level, recorded for map-level progress (optional). */
+  subjectKey?: SubjectKey;
+  levelId?: number;
 }
 
 export interface ProgressContextValue {

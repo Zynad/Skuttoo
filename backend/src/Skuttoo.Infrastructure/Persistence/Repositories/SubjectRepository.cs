@@ -23,6 +23,7 @@ public sealed class SubjectRepository(SkuttooDbContext db) : ISubjectRepository
         return await _db.Subjects
             .AsNoTracking()
             .Include(s => s.Levels.OrderBy(l => l.DisplayOrder))
+                .ThenInclude(l => l.Exercises)
             .FirstOrDefaultAsync(s => s.Key == key, cancellationToken)
             .ConfigureAwait(false);
     }

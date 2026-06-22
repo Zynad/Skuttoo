@@ -10,4 +10,7 @@ public sealed record LevelDto(
     LocalizedText Title,
     int DifficultyTier,
     int AgeMin,
-    int AgeMax);
+    int AgeMax,
+    // Ids of the level's exercises (answer-safe) so the client can show real per-level
+    // progress on the island path without an extra request per level.
+    IReadOnlyList<int> ExerciseIds);

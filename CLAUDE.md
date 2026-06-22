@@ -33,7 +33,7 @@ The brand name in the UI is **Skuttö** for Swedish and **Skuttoo** for English.
 /.github/workflows     GitHub Actions (deploy.yml — OIDC, no secrets)
 /infra                 deploy.bicep + parameters (second web app on existing plan)
 /backend
-  Skuttoo.sln
+  Skuttoo.slnx
   /src
     Skuttoo.Api            Controllers, Program.cs, Config/appsettings*.json, wwwroot
     Skuttoo.Application    feature services (the use-cases)

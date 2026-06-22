@@ -8,11 +8,12 @@ import { contentApi } from '../services/contentApi';
 import { TopBar } from '../components/TopBar';
 import { SkyBackground } from '../components/SkyBackground';
 import { MascotBubble } from '../components/MascotBubble';
-import { ProgressPath, type LevelState } from '../components/ProgressPath';
+import { ProgressPath } from '../components/ProgressPath';
 import { Button } from '../components/Button';
 import { LoadingState } from '../components/LoadingState';
 import { ErrorState } from '../components/ErrorState';
 import { isSubjectKey, islandThemes } from '../utils/islandTheme';
+import { levelStates } from '../utils/progressSummary';
 import type { Level } from '../types/content';
 
 /** Subject island: shows the level path. Entering a level opens its first exercise. */
@@ -60,11 +61,10 @@ export function Island() {
 
   const theme = islandThemes[validKey];
 
-  const stateOf = (_level: Level, index: number): LevelState => {
-    // 1.1: all seeded levels are playable so every exercise type is reachable.
-    // Progressive locking/unlocking arrives with gamification (sub-phase 1.7).
-    return index === 0 ? 'current' : 'available';
-  };
+  // Real progress: completed levels are lit, the first unsolved one is current, the rest available.
+  // Everything stays playable — progressive locking/unlocking arrives with gamification (1.7).
+  const sortedLevels = subject ? [...subject.levels].sort((a, b) => a.displayOrder - b.displayOrder) : [];
+  const states = levelStates(sortedLevels, profile.results);
 
   return (
     <div className="min-h-full">
@@ -99,10 +99,10 @@ export function Island() {
             <div className="mt-4">
               {subject.levels.length > 0 ? (
                 <ProgressPath
-                  levels={[...subject.levels].sort((a, b) => a.displayOrder - b.displayOrder)}
+                  levels={sortedLevels}
                   theme={theme}
                   lang={lang}
-                  stateOf={stateOf}
+                  stateOf={(_level, index) => states[index]}
                   onSelectLevel={(level) => void openLevel(level)}
                 />
               ) : (
