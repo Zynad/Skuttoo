@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { unlockBeforeIndex } from './helpers';
 
 /**
  * Drag-to-bucket exercise via tap-to-place (mobile viewport): open / -> English island ->
@@ -33,7 +34,8 @@ test.describe('drag-to-bucket exercise', () => {
   });
 
   test('child sorts the words into the correct buckets and earns a reward', async ({ page }) => {
-    await page.goto('/');
+    // The sorting level is the third stop; complete the earlier ones so it is unlocked.
+    await unlockBeforeIndex(page, 'english', 2);
     const startingCoins = await coinsValue(page);
 
     await page.getByTestId('island-english').click();

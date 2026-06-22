@@ -41,9 +41,11 @@ internal static partial class SeedData
                         Prompt = new LocalizedText(
                             "Vilket ord passar bilden?",
                             "Which word matches the picture?"),
+                        // The instruction is the same across these exercises, so they share one clip;
+                        // the taught word has its own clip on TargetAudio (read aloud first).
                         PromptAudio = new LocalizedAudio(
-                            "assets/audio/sv/sv-word-sun.mp3",
-                            "assets/audio/en/sv-word-sun.mp3"),
+                            "assets/audio/sv/sv-prompt-which-word.mp3",
+                            "assets/audio/en/en-prompt-which-word.mp3"),
                         // Taught word ("sol") in the content language (Swedish).
                         Target = new LocalizedText("sol", "sol"),
                         TargetAudio = new LocalizedAudio("assets/audio/sv/sv-word-sun.mp3", null),
@@ -86,8 +88,8 @@ internal static partial class SeedData
                             "Vilket ord passar bilden?",
                             "Which word matches the picture?"),
                         PromptAudio = new LocalizedAudio(
-                            "assets/audio/sv/sv-word-cat.mp3",
-                            "assets/audio/en/sv-word-cat.mp3"),
+                            "assets/audio/sv/sv-prompt-which-word.mp3",
+                            "assets/audio/en/en-prompt-which-word.mp3"),
                         Target = new LocalizedText("katt", "katt"),
                         TargetAudio = new LocalizedAudio("assets/audio/sv/sv-word-cat.mp3", null),
                         RewardCoins = 10,
@@ -108,8 +110,8 @@ internal static partial class SeedData
                             "Vilket ord passar bilden?",
                             "Which word matches the picture?"),
                         PromptAudio = new LocalizedAudio(
-                            "assets/audio/sv/sv-word-house.mp3",
-                            "assets/audio/en/sv-word-house.mp3"),
+                            "assets/audio/sv/sv-prompt-which-word.mp3",
+                            "assets/audio/en/en-prompt-which-word.mp3"),
                         Target = new LocalizedText("hus", "hus"),
                         TargetAudio = new LocalizedAudio("assets/audio/sv/sv-word-house.mp3", null),
                         RewardCoins = 10,

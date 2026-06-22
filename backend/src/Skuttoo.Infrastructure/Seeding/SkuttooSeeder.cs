@@ -37,7 +37,31 @@ public sealed class SkuttooSeeder(SkuttooDbContext db)
             UpsertSubject(subject, seed);
         }
 
+        await SeedBadgesAsync(cancellationToken).ConfigureAwait(false);
+
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>Idempotent badge upsert keyed by <see cref="Badge.Key"/>.</summary>
+    private async Task SeedBadgesAsync(CancellationToken cancellationToken)
+    {
+        var existing = await _db.Badges.ToListAsync(cancellationToken).ConfigureAwait(false);
+
+        foreach (var seed in SeedData.Badges())
+        {
+            var badge = existing.FirstOrDefault(b => b.Key == seed.Key);
+            if (badge is null)
+            {
+                _db.Badges.Add(seed);
+                continue;
+            }
+
+            badge.Name = seed.Name;
+            badge.Description = seed.Description;
+            badge.IconRef = seed.IconRef;
+            badge.CriteriaType = seed.CriteriaType;
+            badge.CriteriaValue = seed.CriteriaValue;
+        }
     }
 
     private static void UpsertSubject(Subject target, Subject seed)

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useT } from '../i18n/useT';
 import { useLanguage } from '../hooks/useLanguage';
@@ -9,11 +9,12 @@ import { TopBar } from '../components/TopBar';
 import { SkyBackground } from '../components/SkyBackground';
 import { MascotBubble } from '../components/MascotBubble';
 import { ProgressPath } from '../components/ProgressPath';
+import { BadgeCelebration } from '../components/BadgeCelebration';
 import { Button } from '../components/Button';
 import { LoadingState } from '../components/LoadingState';
 import { ErrorState } from '../components/ErrorState';
 import { isSubjectKey, islandThemes } from '../utils/islandTheme';
-import { levelStates } from '../utils/progressSummary';
+import { isLevelCompleted, levelStates } from '../utils/progressSummary';
 import type { Level } from '../types/content';
 
 /** Subject island: shows the level path. Entering a level opens its first exercise. */
@@ -22,7 +23,8 @@ export function Island() {
   const navigate = useNavigate();
   const t = useT();
   const { lang } = useLanguage();
-  const { profile } = useProgress();
+  const { profile, syncSubjectCompletion } = useProgress();
+  const [newBadges, setNewBadges] = useState<string[]>([]);
 
   const validKey = isSubjectKey(key) ? key : null;
 
@@ -49,6 +51,21 @@ export function Island() {
     [navigate],
   );
 
+  // Once content is loaded, record which of this island's levels (and the island itself) are
+  // complete so the structural badges can be awarded. Runs on mount and whenever progress changes.
+  useEffect(() => {
+    if (!subject || !validKey) {
+      return;
+    }
+    const completedIds = subject.levels.filter((l) => isLevelCompleted(l, profile.results)).map((l) => l.id);
+    const subjectComplete = subject.levels.length > 0 && completedIds.length === subject.levels.length;
+    void syncSubjectCompletion(validKey, completedIds, subjectComplete).then((keys) => {
+      if (keys.length) {
+        setNewBadges(keys);
+      }
+    });
+  }, [subject, validKey, profile.results, syncSubjectCompletion]);
+
   if (!validKey) {
     return (
       <div className="min-h-full">
@@ -61,8 +78,8 @@ export function Island() {
 
   const theme = islandThemes[validKey];
 
-  // Real progress: completed levels are lit, the first unsolved one is current, the rest available.
-  // Everything stays playable — progressive locking/unlocking arrives with gamification (1.7).
+  // Real progress: completed levels are lit, the first unsolved one is current, the next is
+  // available, and anything further ahead is locked (dimmed). Islands stay open; only levels lock.
   const sortedLevels = subject ? [...subject.levels].sort((a, b) => a.displayOrder - b.displayOrder) : [];
   const states = levelStates(sortedLevels, profile.results);
 
@@ -70,6 +87,7 @@ export function Island() {
     <div className="min-h-full">
       <SkyBackground />
       <TopBar showBack />
+      <BadgeCelebration badgeKeys={newBadges} />
 
       <main className="mx-auto w-full max-w-2xl px-4 pb-16">
         {loading && <LoadingState />}

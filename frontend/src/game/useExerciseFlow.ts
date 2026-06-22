@@ -21,6 +21,10 @@ export interface ExerciseFlowState {
   awardedCoins: number;
   /** Stars awarded on the (first) correct solve. */
   awardedStars: number;
+  /** Coins given for the first play of a new day (0 unless triggered by this exercise). */
+  streakBonusCoins: number;
+  /** Badge keys newly earned by this exercise (coin/streak badges), for a celebration. */
+  newBadgeKeys: string[];
   submitting: boolean;
 }
 
@@ -44,6 +48,8 @@ export function useExerciseFlow(exercise: Exercise, api: ContentApi = contentApi
     correctPlacements: null,
     awardedCoins: 0,
     awardedStars: 0,
+    streakBonusCoins: 0,
+    newBadgeKeys: [],
     submitting: false,
   });
 
@@ -79,6 +85,8 @@ export function useExerciseFlow(exercise: Exercise, api: ContentApi = contentApi
               correctPlacements: result.correctPlacements ?? null,
               awardedCoins: outcome.awardedCoins,
               awardedStars: outcome.awardedStars,
+              streakBonusCoins: prev.streakBonusCoins || outcome.streakBonusCoins,
+              newBadgeKeys: outcome.newBadgeKeys.length ? outcome.newBadgeKeys : prev.newBadgeKeys,
               submitting: false,
             };
           }
@@ -89,6 +97,8 @@ export function useExerciseFlow(exercise: Exercise, api: ContentApi = contentApi
             attemptNumber,
             correctChoiceId: reveal ? result.correctChoiceId : null,
             correctPlacements: reveal ? (result.correctPlacements ?? null) : null,
+            streakBonusCoins: prev.streakBonusCoins || outcome.streakBonusCoins,
+            newBadgeKeys: outcome.newBadgeKeys.length ? outcome.newBadgeKeys : prev.newBadgeKeys,
             submitting: false,
           };
         });

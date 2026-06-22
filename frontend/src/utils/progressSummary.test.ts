@@ -37,23 +37,23 @@ describe('isLevelCompleted', () => {
 describe('levelStates', () => {
   const levels = [level(1, [10, 11]), level(2, [20, 21]), level(3, [30])];
 
-  it('marks the first unsolved level current and the rest available', () => {
-    expect(levelStates(levels, [])).toEqual(['current', 'available', 'available']);
+  it('makes the current level and the next one playable, and locks the rest', () => {
+    expect(levelStates(levels, [])).toEqual(['current', 'available', 'locked']);
   });
 
-  it('lights completed levels and moves current to the next unsolved one', () => {
+  it('lights completed levels and moves current + available forward', () => {
     const results = [result(10, true), result(11, true)];
     expect(levelStates(levels, results)).toEqual(['completed', 'current', 'available']);
   });
 
-  it('marks every level completed when all exercises are solved', () => {
+  it('marks every level completed when all exercises are solved (no locks)', () => {
     const results = [10, 11, 20, 21, 30].map((id) => result(id, true));
     expect(levelStates(levels, results)).toEqual(['completed', 'completed', 'completed']);
   });
 
-  it('reflects a child who jumped ahead (no locking)', () => {
+  it('keeps levels beyond the one-step lookahead locked even if a later one was solved', () => {
     const results = [result(20, true), result(21, true)]; // second level done, first not
-    expect(levelStates(levels, results)).toEqual(['current', 'completed', 'available']);
+    expect(levelStates(levels, results)).toEqual(['current', 'completed', 'locked']);
   });
 });
 

@@ -26,6 +26,15 @@ export interface ExerciseResult {
   levelId?: number;
 }
 
+/** Cosmetic items the child currently has equipped on the mascot. `null` = nothing equipped. */
+export interface Equipped {
+  mascotColor: string | null;
+  mascotAccessory: string | null;
+}
+
+/** Cosmetic id of the free, default-owned mascot colour. */
+export const DEFAULT_MASCOT_COLOR = 'mascot-color-default';
+
 export interface Profile {
   id: string;
   name: string;
@@ -34,6 +43,13 @@ export interface Profile {
   coins: number;
   stars: number;
   badgeKeys: string[];
+  /** Cosmetic ids the child has bought (the default mascot colour is owned for free). */
+  ownedCosmetics: string[];
+  equipped: Equipped;
+  /** Ids of levels seen fully completed — accumulated as islands are visited, for badge facts. */
+  completedLevelIds: number[];
+  /** Subject keys seen fully completed — accumulated for the island/world badges. */
+  completedSubjectKeys: SubjectKey[];
   streak: Streak;
   results: ExerciseResult[];
 }
@@ -46,6 +62,10 @@ export const createDefaultProfile = (): Profile => ({
   coins: 0,
   stars: 0,
   badgeKeys: [],
+  ownedCosmetics: [DEFAULT_MASCOT_COLOR],
+  equipped: { mascotColor: DEFAULT_MASCOT_COLOR, mascotAccessory: null },
+  completedLevelIds: [],
+  completedSubjectKeys: [],
   streak: { count: 0, lastPlayedDate: null },
   results: [],
 });

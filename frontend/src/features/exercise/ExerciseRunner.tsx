@@ -13,6 +13,7 @@ import { Button } from '../../components/Button';
 import { AudioButton } from '../../components/AudioButton';
 import { RewardBurst } from '../../components/RewardBurst';
 import { MascotBubble } from '../../components/MascotBubble';
+import { BadgeCelebration } from '../../components/BadgeCelebration';
 import { MultipleChoiceExercise } from './MultipleChoiceExercise';
 import { TapToMatchExercise } from './TapToMatchExercise';
 import { DragToBucketExercise } from './DragToBucketExercise';
@@ -88,6 +89,7 @@ export function ExerciseRunner({ exercise }: ExerciseRunnerProps) {
   return (
     <main className="relative mx-auto w-full max-w-2xl px-4 pb-24">
       {flow.phase === 'correct' && <RewardBurst coins={flow.awardedCoins} stars={flow.awardedStars} />}
+      <BadgeCelebration badgeKeys={flow.newBadgeKeys} />
 
       <Card className="mt-2 text-center">
         <div className="flex items-center justify-center gap-3">
@@ -116,6 +118,16 @@ export function ExerciseRunner({ exercise }: ExerciseRunnerProps) {
       </Card>
 
       <p className="mt-4 text-center font-display font-bold text-[var(--color-text-soft)]">{helper}</p>
+
+      {flow.streakBonusCoins > 0 && (
+        <p
+          className="mt-2 text-center font-display font-bold text-[var(--color-coin-edge)]"
+          role="status"
+          data-testid="streak-bonus"
+        >
+          🔥 {t('streak.bonus', { coins: flow.streakBonusCoins })}
+        </p>
+      )}
 
       <div className="mt-3">
         {kind === 'multiple-choice' && (

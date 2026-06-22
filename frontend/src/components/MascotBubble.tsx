@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { Mascot, type MascotState } from '../game/Mascot';
+import type { MascotState } from '../game/Mascot';
+import { EquippedMascot } from './EquippedMascot';
 import { AudioButton } from './AudioButton';
 
 export interface MascotBubbleProps {
@@ -25,7 +26,7 @@ export function MascotBubble({
 }: MascotBubbleProps) {
   return (
     <div className="flex items-end gap-3" data-testid="mascot-bubble">
-      <Mascot state={state} size={mascotSize} />
+      <EquippedMascot state={state} size={mascotSize} />
       <div className="relative max-w-[18rem] flex-1">
         <div className="rounded-[1.5rem] rounded-bl-md bg-[var(--color-surface-raised)] px-4 py-3 shadow-[var(--shadow-soft)]">
           <p className="m-0 font-display text-lg font-bold leading-snug text-[var(--color-text)]">{message}</p>

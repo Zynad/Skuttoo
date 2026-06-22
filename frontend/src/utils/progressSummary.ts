@@ -2,11 +2,8 @@ import type { Level, SubjectKey } from '../types/content';
 import type { ExerciseResult } from '../types/progress';
 import { ISLAND_ORDER } from './islandTheme';
 
-/**
- * Play state of a level on the island path. A subset of ProgressPath's LevelState
- * (no 'locked' — progressive locking is deferred to gamification, sub-phase 1.7).
- */
-export type PlayState = 'completed' | 'current' | 'available';
+/** Play state of a level on the island path. Matches ProgressPath's LevelState. */
+export type PlayState = 'completed' | 'current' | 'available' | 'locked';
 
 const completedExerciseIds = (results: ExerciseResult[]): Set<number> =>
   new Set(results.filter((r) => r.completed).map((r) => r.exerciseId));
@@ -21,9 +18,10 @@ export function isLevelCompleted(level: Level, results: ExerciseResult[]): boole
 }
 
 /**
- * Resolves the play state of each level (in display order): completed levels are lit,
- * the first not-yet-completed level is the current one, and the rest are available.
- * Everything stays playable — there is no locking in 1.6.
+ * Resolves the play state of each level (in display order): completed levels are lit, the
+ * first not-yet-completed level is the current one, the very next level is available (a one-step
+ * lookahead so a child isn't hard-blocked), and anything further ahead is locked (visible but
+ * dimmed). Islands themselves are never locked — only levels within an island. (Sub-phase 1.7.)
  */
 export function levelStates(levels: Level[], results: ExerciseResult[]): PlayState[] {
   const completed = levels.map((level) => isLevelCompleted(level, results));
@@ -32,7 +30,10 @@ export function levelStates(levels: Level[], results: ExerciseResult[]): PlaySta
     if (completed[index]) {
       return 'completed';
     }
-    return index === currentIndex ? 'current' : 'available';
+    if (index === currentIndex) {
+      return 'current';
+    }
+    return index === currentIndex + 1 ? 'available' : 'locked';
   });
 }
 

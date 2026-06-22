@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { unlockBeforeTitle } from './helpers';
 
 /**
  * Math island vertical slices (mobile viewport) for phase 1.2.
@@ -40,7 +41,8 @@ test.describe('math island slices', () => {
   });
 
   test('child solves a simple addition, earns a reward, and progress persists', async ({ page }) => {
-    await page.goto('/');
+    // Addition is a later level; complete the earlier ones so it is unlocked.
+    await unlockBeforeTitle(page, 'math', /Plus|Addition/);
     await expect(page.getByTestId('island-math')).toBeVisible();
 
     const startingCoins = await coinsValue(page);
@@ -77,7 +79,8 @@ test.describe('math island slices', () => {
   });
 
   test('child taps the matching shape and earns a reward', async ({ page }) => {
-    await page.goto('/');
+    // Shapes is a later level; complete the earlier ones so it is unlocked.
+    await unlockBeforeTitle(page, 'math', /Former|Shapes/);
     await page.getByTestId('island-math').click();
     await expect(page).toHaveURL(/\/island\/math$/);
 

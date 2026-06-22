@@ -22,6 +22,7 @@ public static class DependencyInjection
         services.AddScoped<ISubjectRepository, SubjectRepository>();
         services.AddScoped<ILevelRepository, LevelRepository>();
         services.AddScoped<IExerciseRepository, ExerciseRepository>();
+        services.AddScoped<IBadgeRepository, BadgeRepository>();
 
         services.AddScoped<SkuttooSeeder>();
 

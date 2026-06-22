@@ -37,6 +37,16 @@ const mathSubject: SubjectDetail = {
       ageMax: 8,
       exerciseIds: [20],
     },
+    {
+      id: 3,
+      subjectId: 1,
+      displayOrder: 3,
+      title: { sv: 'Former', en: 'Shapes' },
+      difficultyTier: 3,
+      ageMin: 6,
+      ageMax: 9,
+      exerciseIds: [30],
+    },
   ],
 };
 
@@ -64,6 +74,16 @@ describe('Island progress path', () => {
 
     await waitFor(() => expect(screen.getByTestId('level-1')).toHaveAttribute('data-state', 'current'));
     expect(screen.getByTestId('level-2')).toHaveAttribute('data-state', 'available');
+  });
+
+  it('locks levels beyond the next one and disables their button', async () => {
+    renderIsland();
+
+    await waitFor(() => expect(screen.getByTestId('level-1')).toHaveAttribute('data-state', 'current'));
+    expect(screen.getByTestId('level-2')).toHaveAttribute('data-state', 'available');
+    const locked = screen.getByTestId('level-3');
+    expect(locked).toHaveAttribute('data-state', 'locked');
+    expect(locked).toBeDisabled();
   });
 
   it('lights a completed level and moves current to the next one', async () => {

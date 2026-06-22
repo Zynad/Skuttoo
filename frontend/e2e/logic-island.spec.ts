@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { unlockBeforeTitle } from './helpers';
 
 /**
  * Logic island slices (mobile viewport) for phase 1.3.
@@ -66,7 +67,8 @@ test.describe('logic island slices', () => {
   });
 
   test('child picks the next item in a colour pattern and earns a reward', async ({ page }) => {
-    await page.goto('/');
+    // Patterns is a later level; complete the earlier ones so it is unlocked.
+    await unlockBeforeTitle(page, 'logic', /Mönster|Patterns/);
     await page.getByTestId('island-logic').click();
     await expect(page).toHaveURL(/\/island\/logic$/);
 

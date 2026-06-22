@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useT } from '../i18n/useT';
 import { useProgress } from '../hooks/useProgress';
 import { CoinsBadge } from './CoinsBadge';
+import { StreakBadge } from './StreakBadge';
 import { LanguageToggle } from './LanguageToggle';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -43,6 +44,7 @@ export function TopBar({ showBack = false, showLanguage = true }: TopBarProps) {
       )}
 
       <CoinsBadge coins={profile.coins} stars={profile.stars} />
+      {profile.streak.count > 0 && <StreakBadge count={profile.streak.count} />}
 
       <div className="ml-auto flex items-center gap-2">
         {showLanguage && <LanguageToggle />}

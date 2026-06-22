@@ -43,6 +43,10 @@ public static partial class ContentMapper
 
     public static partial IReadOnlyList<SubjectDto> ToDtoList(IEnumerable<Subject> subjects);
 
+    public static partial BadgeDto ToDto(Badge badge);
+
+    public static partial IReadOnlyList<BadgeDto> ToBadgeDtoList(IEnumerable<Badge> badges);
+
     /// <summary>
     /// Hand-written so the subject's <see cref="Subject.Key"/> and <see cref="Subject.ContentLanguage"/>
     /// can be flattened from <c>Exercise.Level.Subject</c> without Mapperly tripping over the nullable

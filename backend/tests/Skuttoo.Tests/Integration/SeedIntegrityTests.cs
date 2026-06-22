@@ -142,6 +142,33 @@ public sealed class SeedIntegrityTests : IClassFixture<SkuttooWebApplicationFact
     }
 
     [Fact]
+    public async Task Badges_are_seeded_with_unique_keys_bilingual_text_and_cover_every_criteria_type()
+    {
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<SkuttooDbContext>();
+        var badges = await db.Badges.AsNoTracking().ToListAsync();
+
+        badges.Count.ShouldBeGreaterThanOrEqualTo(8);
+
+        var keys = badges.Select(b => b.Key).ToList();
+        keys.ShouldAllBe(k => !string.IsNullOrWhiteSpace(k));
+        keys.Distinct().Count().ShouldBe(keys.Count);
+
+        foreach (var badge in badges)
+        {
+            IsBilingual(badge.Name).ShouldBeTrue($"badge {badge.Key} name must be bilingual");
+            IsBilingual(badge.Description).ShouldBeTrue($"badge {badge.Key} description must be bilingual");
+            string.IsNullOrWhiteSpace(badge.IconRef).ShouldBeFalse($"badge {badge.Key} needs an icon");
+        }
+
+        var criteriaTypes = badges.Select(b => b.CriteriaType).Distinct().ToList();
+        foreach (var type in Enum.GetValues<BadgeCriteriaType>())
+        {
+            criteriaTypes.ShouldContain(type, $"the seed should cover the {type} criteria type");
+        }
+    }
+
+    [Fact]
     public async Task DragToBucket_exercises_place_every_item_into_a_real_bucket()
     {
         var subjects = await LoadAllAsync();

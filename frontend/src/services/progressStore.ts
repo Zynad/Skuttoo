@@ -1,5 +1,6 @@
 import { openDB, type IDBPDatabase } from 'idb';
 import { createDefaultProfile, type Profile } from '../types/progress';
+import { normalizeProfile } from '../utils/normalizeProfile';
 
 /**
  * Tiny IndexedDB-backed store for the local child Profile (anonymous, MVP).
@@ -30,7 +31,7 @@ function getDb(): Promise<IDBPDatabase> {
   return dbPromise;
 }
 
-function readFromLocalStorage(): Profile | null {
+function readFromLocalStorage(): unknown {
   if (typeof localStorage === 'undefined') {
     return null;
   }
@@ -39,7 +40,7 @@ function readFromLocalStorage(): Profile | null {
     return null;
   }
   try {
-    return JSON.parse(raw) as Profile;
+    return JSON.parse(raw);
   } catch {
     return null;
   }
@@ -51,14 +52,20 @@ function writeToLocalStorage(profile: Profile): void {
   }
 }
 
-/** Loads the stored profile, creating a default one on first run. */
+/**
+ * Loads the stored profile, creating a default one on first run. Stored profiles are run
+ * through {@link normalizeProfile} so saves from an older app version gain any new fields,
+ * and the upgraded shape is written back so the migration sticks.
+ */
 export async function loadProfile(): Promise<Profile> {
   if (hasIndexedDb()) {
     try {
       const db = await getDb();
-      const stored = (await db.get(STORE, PROFILE_ID)) as Profile | undefined;
+      const stored = (await db.get(STORE, PROFILE_ID)) as unknown;
       if (stored) {
-        return stored;
+        const normalized = normalizeProfile(stored);
+        await db.put(STORE, normalized);
+        return normalized;
       }
       const fresh = createDefaultProfile();
       await db.put(STORE, fresh);
@@ -70,7 +77,9 @@ export async function loadProfile(): Promise<Profile> {
 
   const fromLs = readFromLocalStorage();
   if (fromLs) {
-    return fromLs;
+    const normalized = normalizeProfile(fromLs);
+    writeToLocalStorage(normalized);
+    return normalized;
   }
   const fresh = createDefaultProfile();
   writeToLocalStorage(fresh);

@@ -3,6 +3,16 @@ import { afterEach, beforeEach, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import 'fake-indexeddb/auto';
 
+// ProgressProvider fetches the badge catalogue on mount; in tests resolve it instantly with
+// the bundled fallback so no component test makes a real (failing) network request.
+vi.mock('../services/badgeApi', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../services/badgeApi')>();
+  return {
+    ...actual,
+    badgeApi: { getBadges: () => Promise.resolve(actual.FALLBACK_BADGES) },
+  };
+});
+
 // jsdom lacks SpeechSynthesis; provide a minimal spyable stub.
 class FakeUtterance {
   text: string;

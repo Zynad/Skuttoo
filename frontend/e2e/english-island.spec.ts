@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { unlockBeforeTitle } from './helpers';
 
 /**
  * English island slices (mobile viewport) for phase 1.5.
@@ -38,7 +39,8 @@ test.describe('english island slices', () => {
   test('child listens to a short phrase and picks the right picture, earning a reward that persists', async ({
     page,
   }) => {
-    await page.goto('/');
+    // Short phrases is a later level; complete the earlier ones so it is unlocked.
+    await unlockBeforeTitle(page, 'english', /Korta fraser|Short phrases/);
     await expect(page.getByTestId('island-english')).toBeVisible();
 
     const startingCoins = await coinsValue(page);

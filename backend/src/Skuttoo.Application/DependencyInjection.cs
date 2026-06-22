@@ -11,6 +11,7 @@ public static class DependencyInjection
         services.AddScoped<ISubjectService, SubjectService>();
         services.AddScoped<ILevelService, LevelService>();
         services.AddScoped<IExerciseService, ExerciseService>();
+        services.AddScoped<IBadgeService, BadgeService>();
 
         return services;
     }

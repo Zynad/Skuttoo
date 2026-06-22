@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { unlockBeforeTitle } from './helpers';
 
 /**
  * Swedish island slices (mobile viewport) for phase 1.4.
@@ -69,7 +70,8 @@ test.describe('swedish island slices', () => {
   });
 
   test('child reads a word and picks the matching picture', async ({ page }) => {
-    await page.goto('/');
+    // First reading is a later level; complete the earlier ones so it is unlocked.
+    await unlockBeforeTitle(page, 'swedish', /Första läsningen|First reading/);
     await page.getByTestId('island-swedish').click();
     await expect(page).toHaveURL(/\/island\/swedish$/);
 
