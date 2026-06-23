@@ -59,7 +59,9 @@ export async function seedProfile(page: Page, patch: Record<string, unknown>): P
           const get = store.get('local');
           get.onsuccess = () => {
             const existing = (get.result as Record<string, unknown>) ?? { id: 'local' };
-            store.put({ ...existing, ...seed, id: 'local' });
+            // Default to the youngest age so the first-run onboarding gate is satisfied and every
+            // node starts unlocked exactly as before age existed; a patch can override `age`.
+            store.put({ age: 3, ...existing, ...seed, id: 'local' });
           };
           tx.oncomplete = () => {
             db.close();
@@ -72,6 +74,15 @@ export async function seedProfile(page: Page, patch: Record<string, unknown>): P
     patch,
   );
   await page.reload();
+}
+
+/**
+ * Puts the child past the first-run age gate (default age 3 — the youngest, so every node starts
+ * unlocked just as before age existed) and lands on the map. Specs that previously went straight to
+ * `goto('/')` call this in their beforeEach now that an age is required before play.
+ */
+export async function ensureOnboarded(page: Page, age = 3): Promise<void> {
+  await seedProfile(page, { age });
 }
 
 async function levelsOf(page: Page, subjectKey: string): Promise<SeedLevel[]> {

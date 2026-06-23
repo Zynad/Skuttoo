@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useT } from '../i18n/useT';
 import { useProgress } from '../hooks/useProgress';
 import { CoinsBadge } from './CoinsBadge';
@@ -16,8 +16,10 @@ export interface TopBarProps {
 /** Sticky top bar with optional back, coins/stars, language + theme toggles. */
 export function TopBar({ showBack = false, showLanguage = true }: TopBarProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   const t = useT();
   const { profile } = useProgress();
+  const onProfile = location.pathname === '/profile';
 
   return (
     <header className="sticky top-0 z-30 flex items-center gap-2 px-4 pb-2 pt-[max(0.75rem,env(safe-area-inset-top))]">
@@ -47,6 +49,17 @@ export function TopBar({ showBack = false, showLanguage = true }: TopBarProps) {
       {profile.streak.count > 0 && <StreakBadge count={profile.streak.count} />}
 
       <div className="ml-auto flex items-center gap-2">
+        {!onProfile && (
+          <button
+            type="button"
+            data-testid="profile-link"
+            onClick={() => void navigate('/profile')}
+            aria-label={t('nav.profile')}
+            className="grid h-11 w-11 place-items-center rounded-full bg-[var(--color-surface-raised)] text-xl shadow-[var(--shadow-soft)] transition-transform active:scale-90"
+          >
+            <span aria-hidden="true">🦊</span>
+          </button>
+        )}
         {showLanguage && <LanguageToggle />}
         <ThemeToggle />
       </div>

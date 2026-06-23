@@ -3,7 +3,7 @@ import type { ExerciseResult } from '../types/progress';
 import { ISLAND_ORDER } from './islandTheme';
 
 /** Play state of a level on the island path. Matches ProgressPath's LevelState. */
-export type PlayState = 'completed' | 'current' | 'available' | 'locked';
+export type PlayState = 'completed' | 'current' | 'available' | 'locked' | 'optional';
 
 const completedExerciseIds = (results: ExerciseResult[]): Set<number> =>
   new Set(results.filter((r) => r.completed).map((r) => r.exerciseId));
@@ -18,17 +18,47 @@ export function isLevelCompleted(level: Level, results: ExerciseResult[]): boole
 }
 
 /**
- * Resolves the play state of each level (in display order): completed levels are lit, the
- * first not-yet-completed level is the current one, the very next level is available (a one-step
- * lookahead so a child isn't hard-blocked), and anything further ahead is locked (visible but
- * dimmed). Islands themselves are never locked — only levels within an island. (Sub-phase 1.7.)
+ * Index of the level an exact age should start on: the first level (in display order) whose
+ * suggested age range still reaches the child's age (`ageMax >= age`) — i.e. the earliest node
+ * that isn't too easy. Younger children start at the first node; older children skip the easiest
+ * ones. A `null` age (not onboarded) starts at the first node. Relies on the seed invariant that
+ * `ageMax` is non-decreasing along the path.
  */
-export function levelStates(levels: Level[], results: ExerciseResult[]): PlayState[] {
+export function startNodeForAge(levels: Level[], age: number | null): number {
+  if (levels.length === 0 || age === null) {
+    return 0;
+  }
+  const index = levels.findIndex((level) => level.ageMax >= age);
+  return index === -1 ? levels.length - 1 : index;
+}
+
+/**
+ * Resolves the play state of each level (in display order). Completed levels are lit. Nodes before
+ * the age-appropriate start node (see {@link startNodeForAge}) are `optional` — playable warm-ups
+ * that never block progress. From the start onward, the first not-yet-completed node is `current`,
+ * the very next is `available` (a one-step lookahead so a child isn't hard-blocked), and anything
+ * further ahead is `locked` (visible but dimmed). Islands themselves are never locked — only levels
+ * within an island. (Sub-phases 1.7 + exact-age onboarding.)
+ */
+export function levelStates(levels: Level[], results: ExerciseResult[], age: number | null): PlayState[] {
   const completed = levels.map((level) => isLevelCompleted(level, results));
-  const currentIndex = completed.findIndex((done) => !done);
+  const start = startNodeForAge(levels, age);
+
+  // Current = first not-yet-completed node at or after the start; optional warm-ups don't block it.
+  let currentIndex = -1;
+  for (let i = start; i < levels.length; i += 1) {
+    if (!completed[i]) {
+      currentIndex = i;
+      break;
+    }
+  }
+
   return levels.map((_, index) => {
     if (completed[index]) {
       return 'completed';
+    }
+    if (index < start) {
+      return 'optional';
     }
     if (index === currentIndex) {
       return 'current';

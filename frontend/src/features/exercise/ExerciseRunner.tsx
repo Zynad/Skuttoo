@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useT } from '../../i18n/useT';
 import { useLanguage } from '../../hooks/useLanguage';
 import { useSpeak } from '../../hooks/useSpeak';
+import { useProgress } from '../../hooks/useProgress';
+import { uiDefaultsForAge } from '../../utils/ageDefaults';
 import { contentLangFor } from '../../i18n/contentLang';
 import { interactionFor } from '../../game/interactionKind';
 import { useExerciseFlow } from '../../game/useExerciseFlow';
@@ -33,7 +35,10 @@ export function ExerciseRunner({ exercise }: ExerciseRunnerProps) {
   const { lang: uiLang } = useLanguage();
   const navigate = useNavigate();
   const { say } = useSpeak();
+  const { profile } = useProgress();
   const flow = useExerciseFlow(exercise);
+
+  const autoplayAudio = uiDefaultsForAge(profile.age).audioAutoplay;
 
   const contentLang = contentLangFor(exercise.contentLanguage, uiLang);
   const kind = interactionFor(exercise.type);
@@ -45,8 +50,12 @@ export function ExerciseRunner({ exercise }: ExerciseRunnerProps) {
   const img = imageUrl(exercise.imageRef);
 
   // Auto read-aloud on first show: the taught word (content language) when present,
-  // otherwise the instruction (UI language). Audio-first for pre-readers.
+  // otherwise the instruction (UI language). Audio-first for pre-readers; gated on the
+  // age-derived default so it can be tuned per age later.
   useEffect(() => {
+    if (!autoplayAudio) {
+      return;
+    }
     if (targetText) {
       void say(targetText, { clip: targetClip, lang: contentLang });
     } else {

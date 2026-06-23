@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { unlockBeforeTitle } from './helpers';
+import { ensureOnboarded, unlockBeforeTitle } from './helpers';
 
 /**
  * Logic island slices (mobile viewport) for phase 1.3.
@@ -34,6 +34,7 @@ test.describe('logic island slices', () => {
   test.beforeEach(async ({ page, context }) => {
     await context.clearCookies();
     await stubSpeech(page);
+    await ensureOnboarded(page);
   });
 
   test('child taps the matching shape and earns a reward, which persists', async ({ page }) => {

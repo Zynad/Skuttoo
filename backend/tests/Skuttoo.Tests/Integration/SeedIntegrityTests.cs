@@ -202,4 +202,75 @@ public sealed class SeedIntegrityTests : IClassFixture<SkuttooWebApplicationFact
             }
         }
     }
+
+    [Fact]
+    public async Task Each_subject_has_a_full_track_of_themed_nodes()
+    {
+        var subjects = await LoadAllAsync();
+        int LevelCount(SubjectKey key) => subjects.First(s => s.Key == key).Levels.Count;
+
+        // Doubled content depth: Math reaches 10 stops, the other tracks 9.
+        LevelCount(SubjectKey.Math).ShouldBeGreaterThanOrEqualTo(10);
+        LevelCount(SubjectKey.Swedish).ShouldBeGreaterThanOrEqualTo(9);
+        LevelCount(SubjectKey.English).ShouldBeGreaterThanOrEqualTo(9);
+        LevelCount(SubjectKey.Logic).ShouldBeGreaterThanOrEqualTo(9);
+    }
+
+    [Fact]
+    public async Task Newly_authored_nodes_have_a_full_set_of_exercises()
+    {
+        var subjects = await LoadAllAsync();
+
+        foreach (var subject in subjects)
+        {
+            // The harder nodes added in this phase (DisplayOrder >= 6) each carry a full set (3–4)
+            // of exercises. Existing nodes 1–5 are left as authored.
+            foreach (var level in subject.Levels.Where(l => l.DisplayOrder >= 6))
+            {
+                level.Exercises.Count.ShouldBeGreaterThanOrEqualTo(3,
+                    $"{subject.Key} level {level.DisplayOrder} should have a full set of exercises");
+            }
+        }
+    }
+
+    [Fact]
+    public async Task Each_subject_ramps_age_up_to_nine_so_an_exact_age_maps_to_a_start_node()
+    {
+        var subjects = await LoadAllAsync();
+
+        foreach (var subject in subjects)
+        {
+            var ordered = subject.Levels.OrderBy(l => l.DisplayOrder).ToList();
+
+            // AgeMax is non-decreasing along the path — the client's startNodeForAge (first node whose
+            // AgeMax >= the child's age) relies on this to send an older child to the harder end.
+            for (var i = 1; i < ordered.Count; i++)
+            {
+                ordered[i].AgeMax.ShouldBeGreaterThanOrEqualTo(ordered[i - 1].AgeMax,
+                    $"{subject.Key} AgeMax must not decrease at level {ordered[i].DisplayOrder}");
+            }
+
+            ordered.Max(l => l.AgeMax).ShouldBe(9, $"{subject.Key} should top out at age 9");
+            ordered.ShouldAllBe(l => l.AgeMin >= 3 && l.AgeMax <= 9 && l.AgeMin <= l.AgeMax);
+
+            // Genuinely hard content lives at the end of every track.
+            ordered.Max(l => l.DifficultyTier).ShouldBeGreaterThanOrEqualTo(3,
+                $"{subject.Key} should have tier-3 content for older children");
+        }
+    }
+
+    [Fact]
+    public async Task Math_includes_two_digit_arithmetic_for_older_children()
+    {
+        var subjects = await LoadAllAsync();
+        var math = subjects.First(s => s.Key == SubjectKey.Math);
+
+        var hasTwoDigitAnswer = math.Levels
+            .SelectMany(l => l.Exercises)
+            .Where(e => e.Type == ExerciseType.SimpleAddition)
+            .SelectMany(e => e.Choices)
+            .Any(c => int.TryParse(c.Label?.En, out var n) && n >= 10);
+
+        hasTwoDigitAnswer.ShouldBeTrue("Math should include two-digit arithmetic (an answer >= 10) for ages 8–9");
+    }
 }

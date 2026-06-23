@@ -30,6 +30,15 @@ export function WorldMap() {
       <header className="flex items-center gap-2 px-4 pb-2 pt-[max(0.75rem,env(safe-area-inset-top))]">
         <CoinsBadge coins={profile.coins} stars={profile.stars} />
         <div className="ml-auto flex items-center gap-2">
+          <button
+            type="button"
+            data-testid="profile-link"
+            onClick={() => void navigate('/profile')}
+            aria-label={t('nav.profile')}
+            className="grid h-11 w-11 place-items-center rounded-full bg-[var(--color-surface-raised)] text-xl shadow-[var(--shadow-soft)] transition-transform active:scale-90"
+          >
+            <span aria-hidden="true">🦊</span>
+          </button>
           <LanguageToggle />
           <ThemeToggle />
         </div>

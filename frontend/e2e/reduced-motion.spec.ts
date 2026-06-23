@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { stubSpeech } from './helpers';
+import { ensureOnboarded, stubSpeech } from './helpers';
 
 /**
  * Reduced-motion respect (sub-phase 1.8). With the OS preference set, the global CSS block
@@ -11,6 +11,7 @@ test.use({ reducedMotion: 'reduce' });
 test.describe('reduced motion', () => {
   test.beforeEach(async ({ page }) => {
     await stubSpeech(page);
+    await ensureOnboarded(page);
   });
 
   test('neutralises the mascot animation when the child prefers reduced motion', async ({ page }) => {

@@ -57,6 +57,7 @@ Status: all **Accepted** (2026-06-21) unless noted.
 ### ADR-013 — MVP age band 3–9; subjects Math, Swedish, English, Logic
 **Decision:** Target ages 3–9 first (pre-readers + early readers); four subjects in the MVP.
 **Why:** Matches the author's own children (3 and 6) and a coherent design space; audio-first covers the youngest. Older ages (up to 15) come after the engine is proven.
+**Amended by ADR-016** (onboarding asks for an exact age rather than a 3–5 / 6–9 band).
 
 ### ADR-014 — Strong testing incl. Playwright E2E
 **Decision:** Unit + integration (backend), unit (frontend), and **Playwright E2E** in a mobile viewport, all gating CI.
@@ -65,3 +66,15 @@ Status: all **Accepted** (2026-06-21) unless noted.
 ### ADR-015 — Incremental delivery in fine-grained sub-phases
 **Decision:** Work in small sub-phases (1.1, 1.2, …) with review/checkpoints between them.
 **Why:** Controls scope and token spend; each step is shippable and testable. See `ROADMAP.md`.
+
+### ADR-016 — Exact-age onboarding (supersedes the age-band idea)
+**Decision:** First-run onboarding asks for an **exact age** (3–9) instead of a 3–5 / 6–9 band — superseding the planned band picker and **amending ADR-013**. Age is **client-side only** (the MVP stays anonymous, ADR-007): the local `Profile` stores `age: number|null` and `ageBand` becomes a derived value (≤5 → `3-5`, else `6-9`). The exact age sets the per-subject **starting node** (`startNodeForAge`); the derived band drives the UI default split (pre-reader ≤5 vs reader ≥6). Earlier nodes stay visible and playable as **optional warm-ups** (never hard-locked).
+**Why:** A single exact age is simpler for a parent than a band and gives finer placement without any backend change; keeping earlier nodes optional means a misjudged age never blocks or bores the child. Local storage keeps it anonymous and GDPR-friendly.
+
+### ADR-017 — Per-subject themed tracks with a data-driven node metaphor
+**Decision:** The world map is a **hub**; entering a subject opens its **own themed map**. Each track's node "metaphor noun" (planets / glades / destinations / temples) is **derived client-side** from the existing `Subject.ThemeKey` (`islandTheme.ts`) — **no new DB field and no migration**.
+**Why:** Gives each island a distinct, child-legible identity and a richer sense of journey, while reusing data we already have; deriving on the client keeps the content schema and seed untouched.
+
+### ADR-018 — Double the content depth for ages 6–9
+**Decision:** Roughly double the per-track content (Math 5 → 10 nodes; Logic/Swedish/English 5 → 9) via an **append-only** seed — no `Level` ids changed, no EF migration. **No new `ExerciseType`**: `SimpleAddition` is the single-choice arithmetic type and now also covers subtraction, teens, two-digit addition (incl. carry) and comparison.
+**Why:** The MVP was thin for older children; appending nodes adds genuinely harder material without invalidating client `completedLevelIds` or growing the type system. Reusing `SimpleAddition` keeps the engine unchanged (everything still grades as single-correct-choice).

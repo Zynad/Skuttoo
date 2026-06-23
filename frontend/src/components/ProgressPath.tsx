@@ -3,7 +3,7 @@ import type { Lang } from '../i18n/dictionaries';
 import type { IslandTheme } from '../utils/islandTheme';
 import { useT } from '../i18n/useT';
 
-export type LevelState = 'completed' | 'current' | 'available' | 'locked';
+export type LevelState = 'completed' | 'current' | 'available' | 'locked' | 'optional';
 
 export interface ProgressPathProps {
   levels: Level[];
@@ -24,6 +24,7 @@ export function ProgressPath({ levels, theme, lang, stateOf, onSelectLevel }: Pr
         const state = stateOf(level, index);
         const locked = state === 'locked';
         const completed = state === 'completed';
+        const optional = state === 'optional';
 
         return (
           <li key={level.id} className="flex items-center gap-4">
@@ -31,7 +32,7 @@ export function ProgressPath({ levels, theme, lang, stateOf, onSelectLevel }: Pr
               aria-hidden="true"
               className="grid h-12 w-12 shrink-0 place-items-center rounded-full font-display text-xl font-extrabold text-white"
               style={{
-                background: locked ? 'var(--color-border)' : theme.color,
+                background: locked ? 'var(--color-border)' : optional ? theme.colorAccent : theme.color,
                 opacity: locked ? 0.6 : 1,
               }}
             >
@@ -55,6 +56,7 @@ export function ProgressPath({ levels, theme, lang, stateOf, onSelectLevel }: Pr
                   state === 'current'
                     ? `color-mix(in srgb, ${theme.colorSoft} 80%, var(--color-surface-raised))`
                     : 'var(--color-surface-raised)',
+                opacity: optional ? 0.85 : 1,
               }}
             >
               <span>
@@ -62,11 +64,11 @@ export function ProgressPath({ levels, theme, lang, stateOf, onSelectLevel }: Pr
                   {level.title[lang]}
                 </span>
                 <span className="block text-sm font-semibold text-[var(--color-text-soft)]">
-                  {t('island.level', { n: level.displayOrder })}
+                  {t(theme.metaphorNounKey, { n: level.displayOrder })}
                 </span>
               </span>
               <span className="font-display text-base font-bold" style={{ color: locked ? undefined : theme.color }}>
-                {locked ? t('island.locked') : t('island.startLevel')}
+                {locked ? t('island.locked') : optional ? t('track.optional') : t('island.startLevel')}
               </span>
             </button>
           </li>

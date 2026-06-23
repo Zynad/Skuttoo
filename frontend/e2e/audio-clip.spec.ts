@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { stubSpeech } from './helpers';
+import { ensureOnboarded, stubSpeech } from './helpers';
 
 /**
  * Pre-generated audio (sub-phase 1.8). The read-aloud is clip-first: the app probes the committed
@@ -12,6 +12,7 @@ test.describe('pre-generated audio clips', () => {
   test.beforeEach(async ({ page, context }) => {
     await context.clearCookies();
     await stubSpeech(page);
+    await ensureOnboarded(page);
   });
 
   test('requests a pre-generated clip for the exercise (clip-first strategy)', async ({ page }) => {

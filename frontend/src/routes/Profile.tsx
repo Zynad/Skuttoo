@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import { useT } from '../i18n/useT';
 import { useProgress } from '../hooks/useProgress';
 import { TopBar } from '../components/TopBar';
 import { SkyBackground } from '../components/SkyBackground';
 import { Card } from '../components/Card';
+import { Button } from '../components/Button';
+import { AgePicker } from '../components/AgePicker';
 import { MascotBubble } from '../components/MascotBubble';
 import { StreakBadge } from '../components/StreakBadge';
 import { BadgeGrid } from '../components/BadgeGrid';
@@ -11,7 +14,8 @@ import { ShopSection } from '../components/ShopSection';
 /** Simple profile screen summarising local progress. */
 export function Profile() {
   const t = useT();
-  const { profile } = useProgress();
+  const { profile, setAge } = useProgress();
+  const [editingAge, setEditingAge] = useState(false);
   const hasProgress = profile.coins > 0 || profile.stars > 0 || profile.results.length > 0;
 
   return (
@@ -38,6 +42,27 @@ export function Profile() {
             <StreakBadge count={profile.streak.count} size="lg" />
             <p data-testid="profile-streak">{t('profile.streakLine', { count: profile.streak.count })}</p>
           </div>
+        </Card>
+
+        <Card className="mt-4">
+          {editingAge ? (
+            <AgePicker
+              initialAge={profile.age}
+              onConfirm={(age) => {
+                void setAge(age);
+                setEditingAge(false);
+              }}
+            />
+          ) : (
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <p data-testid="profile-age" className="font-display text-lg font-bold text-[var(--color-text)]">
+                {profile.age !== null ? t('profile.ageLine', { age: profile.age }) : ''}
+              </p>
+              <Button variant="secondary" data-testid="change-age" onClick={() => setEditingAge(true)}>
+                {t('profile.changeAge')}
+              </Button>
+            </div>
+          )}
         </Card>
 
         <section className="mt-8">

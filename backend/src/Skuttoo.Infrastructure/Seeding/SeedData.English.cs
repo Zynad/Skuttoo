@@ -467,6 +467,413 @@ internal static partial class SeedData
                     },
                 },
             },
+            new()
+            {
+                DisplayOrder = 6,
+                DifficultyTier = 2,
+                AgeMin = 6,
+                AgeMax = 9,
+                Title = new LocalizedText("Fler ord", "More words"),
+                Exercises = new List<Exercise>
+                {
+                    new()
+                    {
+                        DisplayOrder = 1,
+                        Type = ExerciseType.ListenPickWord,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Lyssna och välj rätt bild.",
+                            "Listen and pick the right picture."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/en-listen-instruction.mp3",
+                            "assets/audio/en/en-listen-instruction.mp3"),
+                        Target = new LocalizedText("bird", "bird"),
+                        TargetAudio = new LocalizedAudio(null, "assets/audio/en/en-word-bird.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/pic-bird.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-fish.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/pic-cat.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 2,
+                        Type = ExerciseType.ListenPickWord,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Lyssna och välj rätt bild.",
+                            "Listen and pick the right picture."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/en-listen-instruction.mp3",
+                            "assets/audio/en/en-listen-instruction.mp3"),
+                        Target = new LocalizedText("flower", "flower"),
+                        TargetAudio = new LocalizedAudio(null, "assets/audio/en/en-word-flower.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/pic-flower.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-tree.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/pic-house.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 3,
+                        Type = ExerciseType.WordImageMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Vilken bild är ett träd?",
+                            "Which picture is a tree?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/en-which-tree.mp3",
+                            "assets/audio/en/en-which-tree.mp3"),
+                        Target = new LocalizedText("tree", "tree"),
+                        TargetAudio = new LocalizedAudio(null, "assets/audio/en/en-word-tree.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/pic-flower.svg", IsCorrect = false },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-tree.svg", IsCorrect = true },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/pic-bird.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 4,
+                        Type = ExerciseType.ListenPickWord,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Lyssna och välj rätt bild.",
+                            "Listen and pick the right picture."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/en-listen-instruction.mp3",
+                            "assets/audio/en/en-listen-instruction.mp3"),
+                        Target = new LocalizedText("ball", "ball"),
+                        TargetAudio = new LocalizedAudio(null, "assets/audio/en/en-word-ball.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/pic-ball.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-house.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/pic-dog.svg", IsCorrect = false },
+                        },
+                    },
+                },
+            },
+            new()
+            {
+                DisplayOrder = 7,
+                DifficultyTier = 2,
+                AgeMin = 6,
+                AgeMax = 9,
+                Title = new LocalizedText("Färger", "Colours"),
+                Exercises = new List<Exercise>
+                {
+                    new()
+                    {
+                        DisplayOrder = 1,
+                        Type = ExerciseType.ListenPickWord,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Lyssna och välj rätt färg.",
+                            "Listen and pick the right colour."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/en-listen-colour.mp3",
+                            "assets/audio/en/en-listen-colour.mp3"),
+                        Target = new LocalizedText("red", "red"),
+                        TargetAudio = new LocalizedAudio(null, "assets/audio/en/en-colour-red.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/color-red.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/color-blue.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/color-green.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 2,
+                        Type = ExerciseType.ListenPickWord,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Lyssna och välj rätt färg.",
+                            "Listen and pick the right colour."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/en-listen-colour.mp3",
+                            "assets/audio/en/en-listen-colour.mp3"),
+                        Target = new LocalizedText("blue", "blue"),
+                        TargetAudio = new LocalizedAudio(null, "assets/audio/en/en-colour-blue.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/color-blue.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/color-yellow.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/color-red.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 3,
+                        Type = ExerciseType.ListenPickWord,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Lyssna och välj rätt färg.",
+                            "Listen and pick the right colour."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/en-listen-colour.mp3",
+                            "assets/audio/en/en-listen-colour.mp3"),
+                        Target = new LocalizedText("green", "green"),
+                        TargetAudio = new LocalizedAudio(null, "assets/audio/en/en-colour-green.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/color-green.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/color-red.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/color-blue.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 4,
+                        Type = ExerciseType.ListenPickWord,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Lyssna och välj rätt färg.",
+                            "Listen and pick the right colour."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/en-listen-colour.mp3",
+                            "assets/audio/en/en-listen-colour.mp3"),
+                        Target = new LocalizedText("yellow", "yellow"),
+                        TargetAudio = new LocalizedAudio(null, "assets/audio/en/en-colour-yellow.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/color-yellow.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/color-green.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/color-blue.svg", IsCorrect = false },
+                        },
+                    },
+                },
+            },
+            new()
+            {
+                DisplayOrder = 8,
+                DifficultyTier = 3,
+                AgeMin = 7,
+                AgeMax = 9,
+                Title = new LocalizedText("Mat och djur", "Food and animals"),
+                Exercises = new List<Exercise>
+                {
+                    new()
+                    {
+                        DisplayOrder = 1,
+                        Type = ExerciseType.DragToBucket,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Sortera i mat och djur.",
+                            "Sort into food and animals."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/en-sort-food-animals.mp3",
+                            "assets/audio/en/en-sort-food-animals.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Buckets = new List<Bucket>
+                        {
+                            new() { DisplayOrder = 1, Key = "food", Label = new LocalizedText("Mat", "Food") },
+                            new() { DisplayOrder = 2, Key = "animals", Label = new LocalizedText("Djur", "Animals") },
+                        },
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, Label = new LocalizedText("apple", "apple"), ImageRef = "assets/img/apple.svg", GroupKey = "food" },
+                            new() { DisplayOrder = 2, Label = new LocalizedText("banana", "banana"), ImageRef = "assets/img/banana.svg", GroupKey = "food" },
+                            new() { DisplayOrder = 3, Label = new LocalizedText("dog", "dog"), ImageRef = "assets/img/pic-dog.svg", GroupKey = "animals" },
+                            new() { DisplayOrder = 4, Label = new LocalizedText("cat", "cat"), ImageRef = "assets/img/pic-cat.svg", GroupKey = "animals" },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 2,
+                        Type = ExerciseType.TapToMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Para ihop ordet med bilden.",
+                            "Match the word to the picture."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/en-match-food-animals.mp3",
+                            "assets/audio/en/en-match-food-animals.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, Label = new LocalizedText("bird", "bird"), GroupKey = "bird" },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-bird.svg", GroupKey = "bird" },
+                            new() { DisplayOrder = 3, Label = new LocalizedText("fish", "fish"), GroupKey = "fish" },
+                            new() { DisplayOrder = 4, ImageRef = "assets/img/pic-fish.svg", GroupKey = "fish" },
+                            new() { DisplayOrder = 5, Label = new LocalizedText("apple", "apple"), GroupKey = "apple" },
+                            new() { DisplayOrder = 6, ImageRef = "assets/img/apple.svg", GroupKey = "apple" },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 3,
+                        Type = ExerciseType.DragToBucket,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Sortera i mat och djur.",
+                            "Sort into food and animals."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/en-sort-food-animals-2.mp3",
+                            "assets/audio/en/en-sort-food-animals-2.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Buckets = new List<Bucket>
+                        {
+                            new() { DisplayOrder = 1, Key = "food", Label = new LocalizedText("Mat", "Food") },
+                            new() { DisplayOrder = 2, Key = "animals", Label = new LocalizedText("Djur", "Animals") },
+                        },
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, Label = new LocalizedText("banana", "banana"), ImageRef = "assets/img/banana.svg", GroupKey = "food" },
+                            new() { DisplayOrder = 2, Label = new LocalizedText("apple", "apple"), ImageRef = "assets/img/apple.svg", GroupKey = "food" },
+                            new() { DisplayOrder = 3, Label = new LocalizedText("bird", "bird"), ImageRef = "assets/img/pic-bird.svg", GroupKey = "animals" },
+                            new() { DisplayOrder = 4, Label = new LocalizedText("fish", "fish"), ImageRef = "assets/img/pic-fish.svg", GroupKey = "animals" },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 4,
+                        Type = ExerciseType.TapToMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Para ihop ordet med bilden.",
+                            "Match the word to the picture."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/en-match-food-animals-2.mp3",
+                            "assets/audio/en/en-match-food-animals-2.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, Label = new LocalizedText("dog", "dog"), GroupKey = "dog" },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-dog.svg", GroupKey = "dog" },
+                            new() { DisplayOrder = 3, Label = new LocalizedText("cat", "cat"), GroupKey = "cat" },
+                            new() { DisplayOrder = 4, ImageRef = "assets/img/pic-cat.svg", GroupKey = "cat" },
+                            new() { DisplayOrder = 5, Label = new LocalizedText("banana", "banana"), GroupKey = "banana" },
+                            new() { DisplayOrder = 6, ImageRef = "assets/img/banana.svg", GroupKey = "banana" },
+                        },
+                    },
+                },
+            },
+            new()
+            {
+                DisplayOrder = 9,
+                DifficultyTier = 3,
+                AgeMin = 8,
+                AgeMax = 9,
+                Title = new LocalizedText("Bygg en fras", "Build a phrase"),
+                Exercises = new List<Exercise>
+                {
+                    new()
+                    {
+                        DisplayOrder = 1,
+                        Type = ExerciseType.ListenPickWord,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Lyssna och välj rätt bild.",
+                            "Listen and pick the right picture."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/en-listen-instruction.mp3",
+                            "assets/audio/en/en-listen-instruction.mp3"),
+                        Target = new LocalizedText("a red apple", "a red apple"),
+                        TargetAudio = new LocalizedAudio(null, "assets/audio/en/en-phrase-a-red-apple.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/apple.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/banana.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/color-red.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 2,
+                        Type = ExerciseType.ListenPickWord,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Lyssna och välj rätt bild.",
+                            "Listen and pick the right picture."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/en-listen-instruction.mp3",
+                            "assets/audio/en/en-listen-instruction.mp3"),
+                        Target = new LocalizedText("two dogs", "two dogs"),
+                        TargetAudio = new LocalizedAudio(null, "assets/audio/en/en-phrase-two-dogs.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/pic-dog.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-cat.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/pic-fish.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 3,
+                        Type = ExerciseType.ListenPickWord,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Lyssna och välj rätt bild.",
+                            "Listen and pick the right picture."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/en-listen-instruction.mp3",
+                            "assets/audio/en/en-listen-instruction.mp3"),
+                        Target = new LocalizedText("a big house", "a big house"),
+                        TargetAudio = new LocalizedAudio(null, "assets/audio/en/en-phrase-a-big-house.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/pic-house.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-tree.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/pic-ball.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 4,
+                        Type = ExerciseType.TapToMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Para ihop frasen med bilden.",
+                            "Match the phrase to the picture."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/en-match-phrases.mp3",
+                            "assets/audio/en/en-match-phrases.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, Label = new LocalizedText("a red apple", "a red apple"), GroupKey = "red-apple" },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/apple.svg", GroupKey = "red-apple" },
+                            new() { DisplayOrder = 3, Label = new LocalizedText("two dogs", "two dogs"), GroupKey = "two-dogs" },
+                            new() { DisplayOrder = 4, ImageRef = "assets/img/pic-dog.svg", GroupKey = "two-dogs" },
+                            new() { DisplayOrder = 5, Label = new LocalizedText("a big house", "a big house"), GroupKey = "big-house" },
+                            new() { DisplayOrder = 6, ImageRef = "assets/img/pic-house.svg", GroupKey = "big-house" },
+                        },
+                    },
+                },
+            },
         },
     };
 }

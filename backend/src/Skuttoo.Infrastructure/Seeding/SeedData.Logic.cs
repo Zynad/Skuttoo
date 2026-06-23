@@ -424,6 +424,386 @@ internal static partial class SeedData
                     },
                 },
             },
+            new()
+            {
+                DisplayOrder = 6,
+                DifficultyTier = 3,
+                AgeMin = 6,
+                AgeMax = 8,
+                Title = new LocalizedText("Vad passar inte?", "Odd one out"),
+                Exercises = new List<Exercise>
+                {
+                    new()
+                    {
+                        DisplayOrder = 1,
+                        Type = ExerciseType.ShapeMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Tryck på den som inte passar.",
+                            "Tap the one that doesn't belong."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/logic-odd-shape-1.mp3",
+                            "assets/audio/en/logic-odd-shape-1.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/shape-circle.svg", IsCorrect = false },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/shape-circle.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/shape-star.svg", IsCorrect = true },
+                            new() { DisplayOrder = 4, ImageRef = "assets/img/shape-circle.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 2,
+                        Type = ExerciseType.ColorMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Tryck på den som inte passar.",
+                            "Tap the one that doesn't belong."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/logic-odd-color-1.mp3",
+                            "assets/audio/en/logic-odd-color-1.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/color-blue.svg", IsCorrect = false },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/color-red.svg", IsCorrect = true },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/color-blue.svg", IsCorrect = false },
+                            new() { DisplayOrder = 4, ImageRef = "assets/img/color-blue.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 3,
+                        Type = ExerciseType.ShapeMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Tryck på den som inte passar.",
+                            "Tap the one that doesn't belong."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/logic-odd-shape-2.mp3",
+                            "assets/audio/en/logic-odd-shape-2.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/shape-square.svg", IsCorrect = false },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/shape-square.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/shape-square.svg", IsCorrect = false },
+                            new() { DisplayOrder = 4, ImageRef = "assets/img/shape-heart.svg", IsCorrect = true },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 4,
+                        Type = ExerciseType.ColorMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Tryck på den som inte passar.",
+                            "Tap the one that doesn't belong."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/logic-odd-color-2.mp3",
+                            "assets/audio/en/logic-odd-color-2.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/color-green.svg", IsCorrect = false },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/color-green.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/color-yellow.svg", IsCorrect = true },
+                            new() { DisplayOrder = 4, ImageRef = "assets/img/color-green.svg", IsCorrect = false },
+                        },
+                    },
+                },
+            },
+            new()
+            {
+                DisplayOrder = 7,
+                DifficultyTier = 3,
+                AgeMin = 6,
+                AgeMax = 8,
+                Title = new LocalizedText("Svårare mönster", "Harder patterns"),
+                Exercises = new List<Exercise>
+                {
+                    new()
+                    {
+                        DisplayOrder = 1,
+                        Type = ExerciseType.PatternNext,
+                        ImageRef = "assets/img/pattern-color-aab.svg",
+                        Prompt = new LocalizedText(
+                            "Vad kommer sen i mönstret?",
+                            "What comes next in the pattern?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/logic-pattern-aab.mp3",
+                            "assets/audio/en/logic-pattern-aab.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/color-blue.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/color-red.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/color-green.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 2,
+                        Type = ExerciseType.PatternNext,
+                        ImageRef = "assets/img/pattern-shape-abc.svg",
+                        Prompt = new LocalizedText(
+                            "Vad kommer sen i mönstret?",
+                            "What comes next in the pattern?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/logic-pattern-abc.mp3",
+                            "assets/audio/en/logic-pattern-abc.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/shape-circle.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/shape-square.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/shape-triangle.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 3,
+                        Type = ExerciseType.PatternNext,
+                        ImageRef = "assets/img/pattern-color-abca.svg",
+                        Prompt = new LocalizedText(
+                            "Vad kommer sen i mönstret?",
+                            "What comes next in the pattern?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/logic-pattern-abca.mp3",
+                            "assets/audio/en/logic-pattern-abca.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/color-blue.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/color-yellow.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/color-green.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 4,
+                        Type = ExerciseType.PatternNext,
+                        ImageRef = "assets/img/pattern-shape-aabb.svg",
+                        Prompt = new LocalizedText(
+                            "Vad kommer sen i mönstret?",
+                            "What comes next in the pattern?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/logic-pattern-aabb.mp3",
+                            "assets/audio/en/logic-pattern-aabb.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/shape-star.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/shape-heart.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/shape-circle.svg", IsCorrect = false },
+                        },
+                    },
+                },
+            },
+            new()
+            {
+                DisplayOrder = 8,
+                DifficultyTier = 3,
+                AgeMin = 7,
+                AgeMax = 9,
+                Title = new LocalizedText("Ordna efter storlek", "Order by size"),
+                Exercises = new List<Exercise>
+                {
+                    new()
+                    {
+                        DisplayOrder = 1,
+                        Type = ExerciseType.DragToBucket,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Sortera cirklarna efter storlek.",
+                            "Sort the circles by size."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/logic-size-circles.mp3",
+                            "assets/audio/en/logic-size-circles.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Buckets = new List<Bucket>
+                        {
+                            new() { DisplayOrder = 1, Key = "small", Label = new LocalizedText("Liten", "Small") },
+                            new() { DisplayOrder = 2, Key = "medium", Label = new LocalizedText("Mellan", "Medium") },
+                            new() { DisplayOrder = 3, Key = "large", Label = new LocalizedText("Stor", "Large") },
+                        },
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/shape-circle-sm.svg", GroupKey = "small" },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/shape-circle-md.svg", GroupKey = "medium" },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/shape-circle-lg.svg", GroupKey = "large" },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 2,
+                        Type = ExerciseType.ShapeMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Tryck på den största stjärnan.",
+                            "Tap the biggest star."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/logic-size-biggest-star.mp3",
+                            "assets/audio/en/logic-size-biggest-star.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/shape-star-sm.svg", IsCorrect = false },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/shape-star-lg.svg", IsCorrect = true },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/shape-star-md.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 3,
+                        Type = ExerciseType.DragToBucket,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Sortera formerna: liten eller stor?",
+                            "Sort the shapes: small or large?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/logic-size-shapes.mp3",
+                            "assets/audio/en/logic-size-shapes.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Buckets = new List<Bucket>
+                        {
+                            new() { DisplayOrder = 1, Key = "small", Label = new LocalizedText("Liten", "Small") },
+                            new() { DisplayOrder = 2, Key = "large", Label = new LocalizedText("Stor", "Large") },
+                        },
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/shape-square-sm.svg", GroupKey = "small" },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/shape-square-lg.svg", GroupKey = "large" },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/shape-triangle-sm.svg", GroupKey = "small" },
+                            new() { DisplayOrder = 4, ImageRef = "assets/img/shape-triangle-lg.svg", GroupKey = "large" },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 4,
+                        Type = ExerciseType.ShapeMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Tryck på den minsta cirkeln.",
+                            "Tap the smallest circle."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/logic-size-smallest-circle.mp3",
+                            "assets/audio/en/logic-size-smallest-circle.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/shape-circle-lg.svg", IsCorrect = false },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/shape-circle-sm.svg", IsCorrect = true },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/shape-circle-md.svg", IsCorrect = false },
+                        },
+                    },
+                },
+            },
+            new()
+            {
+                DisplayOrder = 9,
+                DifficultyTier = 3,
+                AgeMin = 7,
+                AgeMax = 9,
+                Title = new LocalizedText("Vad fattas?", "What's missing"),
+                Exercises = new List<Exercise>
+                {
+                    new()
+                    {
+                        DisplayOrder = 1,
+                        Type = ExerciseType.PatternNext,
+                        ImageRef = "assets/img/pattern-color-ab-gap.svg",
+                        Prompt = new LocalizedText(
+                            "Vad fattas i mönstret?",
+                            "What's missing in the pattern?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/logic-missing-color-1.mp3",
+                            "assets/audio/en/logic-missing-color-1.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/color-red.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/color-blue.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/color-green.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 2,
+                        Type = ExerciseType.PatternNext,
+                        ImageRef = "assets/img/pattern-shape-abc-gap.svg",
+                        Prompt = new LocalizedText(
+                            "Vad fattas i mönstret?",
+                            "What's missing in the pattern?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/logic-missing-shape-1.mp3",
+                            "assets/audio/en/logic-missing-shape-1.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/shape-square.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/shape-circle.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/shape-triangle.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 3,
+                        Type = ExerciseType.PatternNext,
+                        ImageRef = "assets/img/pattern-color-aab-gap.svg",
+                        Prompt = new LocalizedText(
+                            "Vad fattas i mönstret?",
+                            "What's missing in the pattern?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/logic-missing-color-2.mp3",
+                            "assets/audio/en/logic-missing-color-2.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/color-yellow.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/color-green.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/color-red.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 4,
+                        Type = ExerciseType.PatternNext,
+                        ImageRef = "assets/img/pattern-shape-abab-gap.svg",
+                        Prompt = new LocalizedText(
+                            "Vad fattas i mönstret?",
+                            "What's missing in the pattern?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/logic-missing-shape-2.mp3",
+                            "assets/audio/en/logic-missing-shape-2.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/shape-star.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/shape-heart.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/shape-square.svg", IsCorrect = false },
+                        },
+                    },
+                },
+            },
         },
     };
 }

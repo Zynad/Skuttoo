@@ -26,6 +26,7 @@ pick island → do exercise → instant positive feedback → earn coins/stars
 
 - Islands and levels unlock as earlier ones are completed (with some freedom so a child isn't stuck). Locked stops are visible-but-dimmed to motivate.
 - Difficulty rises along an island's path; completing tiers earns more stars/coins.
+- **Island/track complete = all nodes.** The optional **warm-up nodes** before a child's start node (skipped by older children) still **count toward 100%** but are **not required to start** playing. Badge definitions and thresholds are **unchanged** for this redesign phase — revisit when tuning the economy.
 
 ## Feedback & encouragement (tone)
 

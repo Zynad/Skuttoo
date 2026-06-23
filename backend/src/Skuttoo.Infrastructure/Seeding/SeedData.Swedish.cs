@@ -396,6 +396,402 @@ internal static partial class SeedData
                     },
                 },
             },
+            new()
+            {
+                DisplayOrder = 6,
+                DifficultyTier = 2,
+                AgeMin = 6,
+                AgeMax = 9,
+                Title = new LocalizedText("Fler bokstavsljud", "More letter sounds"),
+                Exercises = new List<Exercise>
+                {
+                    new()
+                    {
+                        DisplayOrder = 1,
+                        Type = ExerciseType.LetterSound,
+                        ImageRef = "assets/img/pic-moon.svg",
+                        Prompt = new LocalizedText(
+                            "Vilken bokstav börjar ordet på?",
+                            "Which letter does the word start with?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/sv-letter-prompt-2.mp3",
+                            "assets/audio/en/sv-letter-prompt-2.mp3"),
+                        Target = new LocalizedText("måne", "måne"),
+                        TargetAudio = new LocalizedAudio("assets/audio/sv/sv-word-moon.mp3", "assets/audio/en/sv-word-moon.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, Label = new LocalizedText("M", "M"), IsCorrect = true },
+                            new() { DisplayOrder = 2, Label = new LocalizedText("L", "L"), IsCorrect = false },
+                            new() { DisplayOrder = 3, Label = new LocalizedText("N", "N"), IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 2,
+                        Type = ExerciseType.LetterSound,
+                        ImageRef = "assets/img/pic-leaf.svg",
+                        Prompt = new LocalizedText(
+                            "Vilken bokstav börjar ordet på?",
+                            "Which letter does the word start with?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/sv-letter-prompt-2.mp3",
+                            "assets/audio/en/sv-letter-prompt-2.mp3"),
+                        Target = new LocalizedText("löv", "löv"),
+                        TargetAudio = new LocalizedAudio("assets/audio/sv/sv-word-leaf.mp3", "assets/audio/en/sv-word-leaf.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, Label = new LocalizedText("L", "L"), IsCorrect = true },
+                            new() { DisplayOrder = 2, Label = new LocalizedText("R", "R"), IsCorrect = false },
+                            new() { DisplayOrder = 3, Label = new LocalizedText("V", "V"), IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 3,
+                        Type = ExerciseType.LetterSound,
+                        ImageRef = "assets/img/pic-fox.svg",
+                        Prompt = new LocalizedText(
+                            "Vilken bokstav börjar ordet på?",
+                            "Which letter does the word start with?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/sv-letter-prompt-2.mp3",
+                            "assets/audio/en/sv-letter-prompt-2.mp3"),
+                        Target = new LocalizedText("räv", "räv"),
+                        TargetAudio = new LocalizedAudio("assets/audio/sv/sv-word-fox.mp3", "assets/audio/en/sv-word-fox.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, Label = new LocalizedText("R", "R"), IsCorrect = true },
+                            new() { DisplayOrder = 2, Label = new LocalizedText("T", "T"), IsCorrect = false },
+                            new() { DisplayOrder = 3, Label = new LocalizedText("V", "V"), IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 4,
+                        Type = ExerciseType.LetterSound,
+                        ImageRef = "assets/img/pic-train.svg",
+                        Prompt = new LocalizedText(
+                            "Vilken bokstav börjar ordet på?",
+                            "Which letter does the word start with?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/sv-letter-prompt-2.mp3",
+                            "assets/audio/en/sv-letter-prompt-2.mp3"),
+                        Target = new LocalizedText("tåg", "tåg"),
+                        TargetAudio = new LocalizedAudio("assets/audio/sv/sv-word-train.mp3", "assets/audio/en/sv-word-train.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, Label = new LocalizedText("T", "T"), IsCorrect = true },
+                            new() { DisplayOrder = 2, Label = new LocalizedText("O", "O"), IsCorrect = false },
+                            new() { DisplayOrder = 3, Label = new LocalizedText("G", "G"), IsCorrect = false },
+                        },
+                    },
+                },
+            },
+            new()
+            {
+                DisplayOrder = 7,
+                DifficultyTier = 3,
+                AgeMin = 7,
+                AgeMax = 9,
+                Title = new LocalizedText("Sammansatta ljud", "Blends"),
+                Exercises = new List<Exercise>
+                {
+                    new()
+                    {
+                        DisplayOrder = 1,
+                        Type = ExerciseType.LetterSound,
+                        ImageRef = "assets/img/pic-clock.svg",
+                        Prompt = new LocalizedText(
+                            "Vilka två bokstäver börjar ordet på?",
+                            "Which two letters does the word start with?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/sv-blend-prompt.mp3",
+                            "assets/audio/en/sv-blend-prompt.mp3"),
+                        Target = new LocalizedText("klocka", "klocka"),
+                        TargetAudio = new LocalizedAudio("assets/audio/sv/sv-word-clock.mp3", "assets/audio/en/sv-word-clock.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, Label = new LocalizedText("kl", "kl"), IsCorrect = true },
+                            new() { DisplayOrder = 2, Label = new LocalizedText("st", "st"), IsCorrect = false },
+                            new() { DisplayOrder = 3, Label = new LocalizedText("br", "br"), IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 2,
+                        Type = ExerciseType.LetterSound,
+                        ImageRef = "assets/img/pic-chair.svg",
+                        Prompt = new LocalizedText(
+                            "Vilka två bokstäver börjar ordet på?",
+                            "Which two letters does the word start with?"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/sv-blend-prompt.mp3",
+                            "assets/audio/en/sv-blend-prompt.mp3"),
+                        Target = new LocalizedText("stol", "stol"),
+                        TargetAudio = new LocalizedAudio("assets/audio/sv/sv-word-chair.mp3", "assets/audio/en/sv-word-chair.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, Label = new LocalizedText("st", "st"), IsCorrect = true },
+                            new() { DisplayOrder = 2, Label = new LocalizedText("sp", "sp"), IsCorrect = false },
+                            new() { DisplayOrder = 3, Label = new LocalizedText("kl", "kl"), IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 3,
+                        Type = ExerciseType.WordImageMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Läs ordet: spöke",
+                            "Read the word: spöke"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/sv-read-ghost.mp3",
+                            "assets/audio/en/sv-read-ghost.mp3"),
+                        Target = new LocalizedText("spöke", "spöke"),
+                        TargetAudio = new LocalizedAudio("assets/audio/sv/sv-word-ghost.mp3", "assets/audio/en/sv-word-ghost.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/pic-ghost.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-chair.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/pic-clock.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 4,
+                        Type = ExerciseType.WordImageMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Läs ordet: bro",
+                            "Read the word: bro"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/sv-read-bridge.mp3",
+                            "assets/audio/en/sv-read-bridge.mp3"),
+                        Target = new LocalizedText("bro", "bro"),
+                        TargetAudio = new LocalizedAudio("assets/audio/sv/sv-word-bridge.mp3", "assets/audio/en/sv-word-bridge.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/pic-bridge.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-ghost.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/pic-house.svg", IsCorrect = false },
+                        },
+                    },
+                },
+            },
+            new()
+            {
+                DisplayOrder = 8,
+                DifficultyTier = 3,
+                AgeMin = 7,
+                AgeMax = 9,
+                Title = new LocalizedText("Läs ordet", "Read the word"),
+                Exercises = new List<Exercise>
+                {
+                    new()
+                    {
+                        DisplayOrder = 1,
+                        Type = ExerciseType.WordImageMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Läs ordet: blomma",
+                            "Read the word: blomma"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/sv-read-flower.mp3",
+                            "assets/audio/en/sv-read-flower.mp3"),
+                        Target = new LocalizedText("blomma", "blomma"),
+                        TargetAudio = new LocalizedAudio("assets/audio/sv/sv-word-flower.mp3", "assets/audio/en/sv-word-flower.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/pic-flower.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-tree.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/pic-bird.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 2,
+                        Type = ExerciseType.WordImageMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Läs ordet: fågel",
+                            "Read the word: fågel"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/sv-read-bird.mp3",
+                            "assets/audio/en/sv-read-bird.mp3"),
+                        Target = new LocalizedText("fågel", "fågel"),
+                        TargetAudio = new LocalizedAudio("assets/audio/sv/sv-word-bird.mp3", "assets/audio/en/sv-word-bird.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/pic-bird.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-fish.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/pic-flower.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 3,
+                        Type = ExerciseType.WordImageMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Läs ordet: stjärna",
+                            "Read the word: stjärna"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/sv-read-star.mp3",
+                            "assets/audio/en/sv-read-star.mp3"),
+                        Target = new LocalizedText("stjärna", "stjärna"),
+                        TargetAudio = new LocalizedAudio("assets/audio/sv/sv-word-star.mp3", "assets/audio/en/sv-word-star.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/pic-star.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-moon.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/sun.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 4,
+                        Type = ExerciseType.WordImageMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Läs ordet: hus",
+                            "Read the word: hus"),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/sv-read-house-2.mp3",
+                            "assets/audio/en/sv-read-house-2.mp3"),
+                        Target = new LocalizedText("hus", "hus"),
+                        TargetAudio = new LocalizedAudio("assets/audio/sv/sv-word-house.mp3", "assets/audio/en/sv-word-house.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/pic-house.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-bridge.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/pic-tree.svg", IsCorrect = false },
+                        },
+                    },
+                },
+            },
+            new()
+            {
+                DisplayOrder = 9,
+                DifficultyTier = 3,
+                AgeMin = 8,
+                AgeMax = 9,
+                Title = new LocalizedText("Korta meningar", "Short sentences"),
+                Exercises = new List<Exercise>
+                {
+                    new()
+                    {
+                        DisplayOrder = 1,
+                        Type = ExerciseType.WordImageMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Läs meningen och välj rätt bild.",
+                            "Read the sentence and pick the right picture."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/sv-sentence-prompt.mp3",
+                            "assets/audio/en/sv-sentence-prompt.mp3"),
+                        Target = new LocalizedText("Katten sover.", "Katten sover."),
+                        TargetAudio = new LocalizedAudio("assets/audio/sv/sv-sentence-cat-sleeps.mp3", "assets/audio/en/sv-sentence-cat-sleeps.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/pic-cat-sleeping.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-dog-running.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/pic-bird-flying.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 2,
+                        Type = ExerciseType.WordImageMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Läs meningen och välj rätt bild.",
+                            "Read the sentence and pick the right picture."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/sv-sentence-prompt.mp3",
+                            "assets/audio/en/sv-sentence-prompt.mp3"),
+                        Target = new LocalizedText("Hunden springer.", "Hunden springer."),
+                        TargetAudio = new LocalizedAudio("assets/audio/sv/sv-sentence-dog-runs.mp3", "assets/audio/en/sv-sentence-dog-runs.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/pic-dog-running.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-cat-sleeping.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/pic-fish.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 3,
+                        Type = ExerciseType.WordImageMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Läs meningen och välj rätt bild.",
+                            "Read the sentence and pick the right picture."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/sv-sentence-prompt.mp3",
+                            "assets/audio/en/sv-sentence-prompt.mp3"),
+                        Target = new LocalizedText("Fågeln flyger.", "Fågeln flyger."),
+                        TargetAudio = new LocalizedAudio("assets/audio/sv/sv-sentence-bird-flies.mp3", "assets/audio/en/sv-sentence-bird-flies.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/pic-bird-flying.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-cat-sleeping.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/pic-dog-running.svg", IsCorrect = false },
+                        },
+                    },
+                    new()
+                    {
+                        DisplayOrder = 4,
+                        Type = ExerciseType.WordImageMatch,
+                        ImageRef = null,
+                        Prompt = new LocalizedText(
+                            "Läs meningen och välj rätt bild.",
+                            "Read the sentence and pick the right picture."),
+                        PromptAudio = new LocalizedAudio(
+                            "assets/audio/sv/sv-sentence-prompt.mp3",
+                            "assets/audio/en/sv-sentence-prompt.mp3"),
+                        Target = new LocalizedText("Solen skiner.", "Solen skiner."),
+                        TargetAudio = new LocalizedAudio("assets/audio/sv/sv-sentence-sun-shines.mp3", "assets/audio/en/sv-sentence-sun-shines.mp3"),
+                        RewardCoins = 10,
+                        RewardStars = 3,
+                        Choices = new List<Choice>
+                        {
+                            new() { DisplayOrder = 1, ImageRef = "assets/img/sun.svg", IsCorrect = true },
+                            new() { DisplayOrder = 2, ImageRef = "assets/img/pic-moon.svg", IsCorrect = false },
+                            new() { DisplayOrder = 3, ImageRef = "assets/img/pic-star.svg", IsCorrect = false },
+                        },
+                    },
+                },
+            },
         },
     };
 }

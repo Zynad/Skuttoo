@@ -8,24 +8,30 @@ How pedagogical content is structured, authored, localized and voiced. Content i
 Subject (island)  →  Level (difficulty stop)  →  Exercise  →  Choice(s)
 ```
 
-A child travels along an island's path of **Levels** (easy → harder), each containing a handful of short **Exercises**. Difficulty is expressed both by `DifficultyTier` and a suggested `AgeMin/AgeMax` so the world adapts to a 3-year-old vs a 9-year-old.
+A child travels along a subject's themed track of **Levels** (the per-track node "stops"; easy → harder), each containing a handful of short **Exercises**. Difficulty is expressed both by `DifficultyTier` and a suggested `AgeMin/AgeMax` so the world adapts to a 3-year-old vs a 9-year-old.
+
+**Node counts (per track):** Math has **10** nodes; Swedish, English and Logic each have **9**. The deeper Math/6–9 content is genuinely harder (teens, subtraction, skip-counting, comparison, two-digit addition with carry).
 
 ## Subjects & exercise types (MVP)
 
-| Island | Theme idea | Exercise types | Age focus |
-|---|---|---|---|
-| **Math** (Matematik) | space/numbers | `CountObjects`, `NumberRecognition`, `SimpleAddition`, `ShapeMatch` | 3–9, scaling |
-| **Logic & shapes/colors** (Logik) | jungle/sorting | `ColorMatch`, `ShapeMatch`, `PatternNext` (image-only) | 3–6 (non-readers) |
-| **Swedish** (Svenska) | letters/forest | `LetterSound`, `WordImageMatch`, early reading | 4–9 |
-| **English** (Engelska) | travel/words | `ListenPickWord`, `WordImageMatch` (listen & pick) | 5–9 |
+| Island | Theme idea | Node metaphor (sv / en) | Exercise types | Age focus |
+|---|---|---|---|---|
+| **Math** (Matematik) | space/numbers | *Planet {n}* | `CountObjects`, `NumberRecognition`, `SimpleAddition`, `ShapeMatch` | 3–9, scaling |
+| **Logic & shapes/colors** (Logik) | jungle/sorting | *Tempel / Temple {n}* | `ColorMatch`, `ShapeMatch`, `PatternNext` (image-only) | 3–6 (non-readers), now reaching 7–9 |
+| **Swedish** (Svenska) | letters/forest | *Glänta / Glade {n}* | `LetterSound`, `WordImageMatch`, early reading | 4–9 |
+| **English** (Engelska) | travel/words | *Resmål / Destination {n}* | `ListenPickWord`, `WordImageMatch` (listen & pick) | 5–9 |
 
 The **Logic** island is deliberately image- and audio-only so the youngest can play before they can read.
+
+Each subject opens its **own themed map** (the world map is the hub). The node metaphor noun above is **derived client-side from `Subject.ThemeKey`** (via `islandTheme.ts`) — there is no backend field and no DB migration for it.
+
+**`SimpleAddition` is the single-choice arithmetic type.** Beyond simple addition it now also covers subtraction, teens, two-digit addition (incl. carry) and bigger/smaller comparison — all graded as single-correct-choice. **No new `ExerciseType` was added** for the deeper content.
 
 ## Age-adaptation principles
 
 - **3–5 (pre-readers):** no required reading; big pictures; everything auto-read-aloud; 2–3 large choices; forgiving.
 - **6–9 (readers):** text + audio optional; more choices; multi-step (e.g. addition); higher tiers unlock.
-- Onboarding picks an age band (sub-phase 1.10) which sets defaults (auto-play audio, choice count, text density). Content is tagged by age band so the map surfaces age-appropriate levels first.
+- Onboarding asks for an **exact age** (3–9; sub-phase 1.10), not just a band. The exact age sets the **starting node** per subject — `startNodeForAge` is the first node (by display order) whose `AgeMax ≥ the child's age`, so an older child skips the easiest stops. **Earlier nodes stay visible and playable as optional warm-ups** (never hard-locked). The derived `ageBand` (≤5 vs ≥6) still drives behavioural defaults: auto-play audio, choice count, text density. This relies on `AgeMax` being non-decreasing along each track (a seed invariant, test-enforced).
 
 ## Bilingual authoring
 

@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { ensureOnboarded } from './helpers';
 
 /**
  * Counting-exercise vertical slice (mobile viewport).
@@ -38,6 +39,7 @@ test.describe('counting exercise slice', () => {
   test.beforeEach(async ({ page, context }) => {
     await context.clearCookies();
     await stubSpeech(page);
+    await ensureOnboarded(page);
   });
 
   test('child counts to three, earns a reward, and progress persists', async ({ page }) => {

@@ -21,7 +21,7 @@ Content responses always include both locales so the client switches language of
 | ContentLanguage | enum `Language?` | `Sv`/`En`, or null. The language this island teaches (English→`En`, Swedish→`Sv`); null = follow the child's UI language (Math, Logic). |
 | Name | LocalizedText | |
 | Description | LocalizedText | short, read-aloud intro |
-| ThemeKey | string | drives the island theme/colours (`--island-math`, …) |
+| ThemeKey | string | drives the island theme/colours (`--island-math`, …) **and the per-track node metaphor** (planets/glades/destinations/temples), which is derived **client-side** from this key (`islandTheme.ts`) — there is no separate DB field for it |
 | DisplayOrder | int | order on the world map |
 
 ### Level  (a stage/path stop on an island)
@@ -97,14 +97,19 @@ Badge (standalone definitions)
 Not in the server DB yet — shapes the local store and the Phase 2 server tables:
 
 ```
-Profile         { id, name, ageBand: '3-5'|'6-9', avatar, coins, stars, badgeKeys[], streak:{count,lastPlayedDate} }
+Profile         { id, name, age: number|null, avatar, coins, stars, badgeKeys[], streak:{count,lastPlayedDate} }
 ExerciseResult  { exerciseId, completed, starsEarned, attempts, lastPlayedAt }
 ```
+
+- **`age`** is the exact age (3–9); `null` = not yet onboarded (the app redirects to `/onboarding`). It is **client-side only** — there is **no server schema change for age** (the MVP stays anonymous, ADR-007). The exact age sets the per-subject starting node (`startNodeForAge`); earlier nodes remain optional warm-ups.
+- **`ageBand`** (`'3-5'|'6-9'`) is no longer stored — it is **derived** from `age` (≤5 → `3-5`, else `6-9`) and drives behavioural defaults only.
+- **Legacy migration:** `normalizeProfile` migrates a pre-`age` save **with progress** by inferring an age from its legacy band (`'6-9'` → 7, `'3-5'` → 4) so returning players aren't bounced to onboarding; an empty old save stays `age: null`.
 
 ## Migrations & seeding
 
 - **Code-first migrations** in `Skuttoo.Infrastructure/Migrations`. In Development the app `Migrate()`s on startup; in prod migrations run on deploy/startup (guarded).
 - **Seeding** is idempotent (upsert by stable keys) and lives in `Infrastructure/Seeding`. Seed data is authored in C# or JSON resources and covers all four subjects (at least one exercise each) for the slice.
+- The content-depth expansion (sub-phase 1.12) is **append-only**: new nodes/exercises were added without changing or reordering existing `Level` ids, so the client `completedLevelIds` references stay valid — no EF migration was needed.
 - Keep migrations **backwards-compatible** (additive / expand-then-contract) so deploys are safe.
 
 ## PostgreSQL path (Phase 4)

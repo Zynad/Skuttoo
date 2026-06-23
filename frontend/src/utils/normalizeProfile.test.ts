@@ -32,6 +32,34 @@ describe('normalizeProfile', () => {
     expect(result.equipped).toEqual({ mascotColor: DEFAULT_MASCOT_COLOR, mascotAccessory: null });
     expect(result.results).toHaveLength(1);
     expect(result.results[0].exerciseId).toBe(1);
+    // A pre-age profile with real progress is migrated (not bounced to onboarding): band → age.
+    expect(result.age).toBe(7);
+    expect(result.ageBand).toBe('6-9');
+  });
+
+  describe('exact age', () => {
+    it('keeps a valid stored exact age and derives the band from it', () => {
+      expect(normalizeProfile({ age: 8 }).age).toBe(8);
+      expect(normalizeProfile({ age: 8 }).ageBand).toBe('6-9');
+      expect(normalizeProfile({ age: 4 }).ageBand).toBe('3-5');
+    });
+
+    it('leaves age null for an empty pre-age profile (treated as first run)', () => {
+      const result = normalizeProfile({ ageBand: '6-9' });
+      expect(result.age).toBeNull();
+      // The legacy band is still surfaced until the child onboards.
+      expect(result.ageBand).toBe('6-9');
+    });
+
+    it('infers an age from the legacy band only when there is real progress', () => {
+      expect(normalizeProfile({ ageBand: '3-5', coins: 10 }).age).toBe(4);
+      expect(normalizeProfile({ ageBand: '6-9', stars: 2 }).age).toBe(7);
+    });
+
+    it('ignores an out-of-range age', () => {
+      expect(normalizeProfile({ age: 99 }).age).toBeNull();
+      expect(normalizeProfile({ age: 2 }).age).toBeNull();
+    });
   });
 
   it('is idempotent', () => {

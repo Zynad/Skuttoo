@@ -31,6 +31,8 @@ export interface ProgressContextValue {
    * structural badges can be evaluated, and returns any newly earned badge keys.
    */
   syncSubjectCompletion: (subjectKey: SubjectKey, completedLevelIds: number[], subjectComplete: boolean) => Promise<string[]>;
+  /** Sets the child's exact age (3–9), recomputes the derived band, and persists. */
+  setAge: (age: number) => Promise<void>;
   /** Buys a cosmetic (deducts coins, adds to owned). No-op if unaffordable / already owned. */
   purchaseCosmetic: (itemId: string) => Promise<void>;
   /** Equips (id) or un-equips (null) a cosmetic in the given slot. */

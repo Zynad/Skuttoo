@@ -78,10 +78,11 @@ export function Island() {
 
   const theme = islandThemes[validKey];
 
-  // Real progress: completed levels are lit, the first unsolved one is current, the next is
-  // available, and anything further ahead is locked (dimmed). Islands stay open; only levels lock.
+  // Real progress: completed levels are lit, the first unsolved one (at or after the child's
+  // age-appropriate start node) is current, the next is available, earlier-than-start nodes are
+  // optional warm-ups, and anything further ahead is locked. Islands stay open; only levels lock.
   const sortedLevels = subject ? [...subject.levels].sort((a, b) => a.displayOrder - b.displayOrder) : [];
-  const states = levelStates(sortedLevels, profile.results);
+  const states = levelStates(sortedLevels, profile.results, profile.age);
 
   return (
     <div className="min-h-full">

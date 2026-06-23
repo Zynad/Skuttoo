@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { ensureOnboarded } from './helpers';
 
 /**
  * Tap-to-match exercise (mobile viewport): open / -> English island -> second level ->
@@ -30,6 +31,7 @@ test.describe('tap-to-match exercise', () => {
   test.beforeEach(async ({ page, context }) => {
     await context.clearCookies();
     await stubSpeech(page);
+    await ensureOnboarded(page);
   });
 
   test('child matches every word to its picture and earns a reward', async ({ page }) => {

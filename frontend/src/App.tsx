@@ -4,7 +4,9 @@ import { WorldMap } from './routes/WorldMap';
 import { Island } from './routes/Island';
 import { Exercise } from './routes/Exercise';
 import { Profile } from './routes/Profile';
+import { Onboarding } from './routes/Onboarding';
 import { NotFound } from './routes/NotFound';
+import { RequireAge } from './components/RequireAge';
 
 export function App() {
   const location = useLocation();
@@ -28,10 +30,39 @@ export function App() {
         transition={{ duration: reduce ? 0.12 : 0.22, ease: 'easeOut' }}
       >
         <Routes location={location}>
-          <Route path="/" element={<WorldMap />} />
-          <Route path="/island/:key" element={<Island />} />
-          <Route path="/exercise/:id" element={<Exercise />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/onboarding" element={<Onboarding />} />
+          <Route
+            path="/"
+            element={
+              <RequireAge>
+                <WorldMap />
+              </RequireAge>
+            }
+          />
+          <Route
+            path="/island/:key"
+            element={
+              <RequireAge>
+                <Island />
+              </RequireAge>
+            }
+          />
+          <Route
+            path="/exercise/:id"
+            element={
+              <RequireAge>
+                <Exercise />
+              </RequireAge>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <RequireAge>
+                <Profile />
+              </RequireAge>
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>

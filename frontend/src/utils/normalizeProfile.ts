@@ -1,4 +1,14 @@
-import { createDefaultProfile, DEFAULT_MASCOT_COLOR, type Equipped, type ExerciseResult, type Profile } from '../types/progress';
+import {
+  ageBandForAge,
+  createDefaultProfile,
+  DEFAULT_MASCOT_COLOR,
+  MAX_AGE,
+  MIN_AGE,
+  type AgeBand,
+  type Equipped,
+  type ExerciseResult,
+  type Profile,
+} from '../types/progress';
 import type { SubjectKey } from '../types/content';
 
 const SUBJECT_KEYS: readonly SubjectKey[] = ['math', 'swedish', 'english', 'logic'];
@@ -22,21 +32,48 @@ export function normalizeProfile(raw: unknown): Profile {
     ...asStringArray(raw.ownedCosmetics),
   ]);
 
+  const coins = asNonNegativeInt(raw.coins, base.coins);
+  const stars = asNonNegativeInt(raw.stars, base.stars);
+  const results = asResultArray(raw.results);
+  const legacyBand: AgeBand = raw.ageBand === '6-9' ? '6-9' : '3-5';
+  const age = resolveAge(raw.age, legacyBand, results.length > 0 || coins > 0 || stars > 0);
+
   return {
     id: asString(raw.id, base.id),
     name: asString(raw.name, base.name),
-    ageBand: raw.ageBand === '6-9' ? '6-9' : '3-5',
+    age,
+    // ageBand is derived from the exact age; for not-yet-onboarded profiles fall back to the legacy value.
+    ageBand: age !== null ? ageBandForAge(age) : legacyBand,
     avatar: asString(raw.avatar, base.avatar),
-    coins: asNonNegativeInt(raw.coins, base.coins),
-    stars: asNonNegativeInt(raw.stars, base.stars),
+    coins,
+    stars,
     badgeKeys: uniqueStrings(asStringArray(raw.badgeKeys)),
     ownedCosmetics,
     equipped: normalizeEquipped(raw.equipped, ownedCosmetics),
     completedLevelIds: [...new Set(asNumberArray(raw.completedLevelIds))],
     completedSubjectKeys: [...new Set(asStringArray(raw.completedSubjectKeys).filter(isSubjectKey))],
     streak: normalizeStreak(raw.streak),
-    results: asResultArray(raw.results),
+    results,
   };
+}
+
+/**
+ * Resolves the child's exact age. A valid stored age wins. Otherwise, a profile saved before the
+ * `age` field existed but that already shows real progress is migrated by inferring an age from its
+ * legacy band ('6-9'→7, '3-5'→4) so returning players are NOT forced back through onboarding. A
+ * truly empty profile resolves to `null`, which the onboarding gate treats as first run.
+ */
+function resolveAge(raw: unknown, legacyBand: AgeBand, hasProgress: boolean): number | null {
+  if (typeof raw === 'number' && Number.isFinite(raw)) {
+    const age = Math.floor(raw);
+    if (age >= MIN_AGE && age <= MAX_AGE) {
+      return age;
+    }
+  }
+  if (hasProgress) {
+    return legacyBand === '6-9' ? 7 : 4;
+  }
+  return null;
 }
 
 function isSubjectKey(value: string): value is SubjectKey {

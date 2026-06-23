@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { ensureOnboarded } from './helpers';
 
 /**
  * The English island must teach in English even when the app's UI language is Swedish.
@@ -26,6 +27,7 @@ test.describe('English island teaches in English', () => {
   test.beforeEach(async ({ page, context }) => {
     await context.clearCookies();
     await stubSpeech(page);
+    await ensureOnboarded(page);
   });
 
   test('shows Swedish instructions but English words, and rewards the right pick', async ({ page }) => {

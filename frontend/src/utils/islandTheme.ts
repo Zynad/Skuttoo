@@ -15,6 +15,11 @@ export interface IslandTheme {
   motif: string;
   nameKey: TranslationKey;
   descKey: TranslationKey;
+  /**
+   * i18n key for the theme's node noun, carrying `{n}` — the metaphor a track's stops use instead
+   * of a generic "level" (Math = planets, Swedish = glades, English = destinations, Logic = temples).
+   */
+  metaphorNounKey: TranslationKey;
 }
 
 export const ISLAND_ORDER: SubjectKey[] = ['math', 'swedish', 'english', 'logic'];
@@ -28,6 +33,7 @@ export const islandThemes: Record<SubjectKey, IslandTheme> = {
     motif: '🚀',
     nameKey: 'island.math.name',
     descKey: 'island.math.desc',
+    metaphorNounKey: 'track.math.noun',
   },
   swedish: {
     key: 'swedish',
@@ -37,6 +43,7 @@ export const islandThemes: Record<SubjectKey, IslandTheme> = {
     motif: '🌲',
     nameKey: 'island.swedish.name',
     descKey: 'island.swedish.desc',
+    metaphorNounKey: 'track.swedish.noun',
   },
   english: {
     key: 'english',
@@ -46,15 +53,17 @@ export const islandThemes: Record<SubjectKey, IslandTheme> = {
     motif: '✈️',
     nameKey: 'island.english.name',
     descKey: 'island.english.desc',
+    metaphorNounKey: 'track.english.noun',
   },
   logic: {
     key: 'logic',
     color: 'var(--island-logic)',
     colorSoft: 'var(--island-logic-soft)',
     colorAccent: 'var(--island-logic-accent)',
-    motif: '🦜',
+    motif: '🛕',
     nameKey: 'island.logic.name',
     descKey: 'island.logic.desc',
+    metaphorNounKey: 'track.logic.noun',
   },
 };
 

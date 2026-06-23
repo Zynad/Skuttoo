@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { createDefaultProfile, type Profile } from '../types/progress';
+import { ageBandForAge, createDefaultProfile, type Profile } from '../types/progress';
 import type { SubjectKey } from '../types/content';
 import type { BadgeDef } from '../types/badges';
 import { clearProfile, loadProfile, saveProfile } from '../services/progressStore';
@@ -103,6 +103,16 @@ export function ProgressProvider({ children }: ProgressProviderProps) {
     [setProfileSynced],
   );
 
+  const setAge = useCallback(
+    async (age: number) => {
+      const current = profileRef.current;
+      const next: Profile = { ...current, age, ageBand: ageBandForAge(age) };
+      setProfileSynced(next);
+      await saveProfile(next);
+    },
+    [setProfileSynced],
+  );
+
   const purchaseCosmetic = useCallback(
     async (itemId: string) => {
       const item = cosmeticById(itemId);
@@ -139,8 +149,8 @@ export function ProgressProvider({ children }: ProgressProviderProps) {
   }, [setProfileSynced]);
 
   const value = useMemo<ProgressContextValue>(
-    () => ({ profile, loading, badgeCatalog, recordAttempt, syncSubjectCompletion, purchaseCosmetic, equipCosmetic, reset }),
-    [profile, loading, badgeCatalog, recordAttempt, syncSubjectCompletion, purchaseCosmetic, equipCosmetic, reset],
+    () => ({ profile, loading, badgeCatalog, recordAttempt, syncSubjectCompletion, setAge, purchaseCosmetic, equipCosmetic, reset }),
+    [profile, loading, badgeCatalog, recordAttempt, syncSubjectCompletion, setAge, purchaseCosmetic, equipCosmetic, reset],
   );
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>;

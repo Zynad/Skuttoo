@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { unlockBeforeTitle } from './helpers';
+import { ensureOnboarded, unlockBeforeTitle } from './helpers';
 
 /**
  * Swedish island slices (mobile viewport) for phase 1.4.
@@ -34,6 +34,7 @@ test.describe('swedish island slices', () => {
   test.beforeEach(async ({ page, context }) => {
     await context.clearCookies();
     await stubSpeech(page);
+    await ensureOnboarded(page);
   });
 
   test('child hears a word and picks its first letter, earning a reward that persists', async ({ page }) => {

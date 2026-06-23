@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { ensureOnboarded } from './helpers';
 
 /**
  * World-map navigation & progress (mobile viewport) for phase 1.6.
@@ -32,6 +33,7 @@ test.describe('world map', () => {
   test.beforeEach(async ({ page, context }) => {
     await context.clearCookies();
     await stubSpeech(page);
+    await ensureOnboarded(page);
   });
 
   test('shows the four island stops and guides the child with the mascot', async ({ page }) => {

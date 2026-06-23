@@ -17,9 +17,16 @@ A friendly character — **Skutt** — that *hops* (skutt/skutta) between island
 
 ## World map & islands
 
-- The home screen is a **world map** with the four subject **islands**, the mascot, and a sense of a journey/path.
-- Each island has its **own theme** (color + motif): e.g. Math = space, Logic = jungle, Swedish = forest, English = travel. Themes are expressed via semantic tokens (`--island-math`, …), not ad-hoc colors.
-- Within an island, a **path of levels** shows progress (completed = lit up / starred, next = highlighted, locked = dimmed).
+- The home screen is a **world map hub** with the four subject **islands**, the mascot, and a sense of a journey/path. Entering an island opens **its own themed map** — the hub is the chooser, each subject map is the playable track.
+- Each island has its **own theme** (color + motif): Math = space, Logic = jungle, Swedish = forest, English = travel. Themes are expressed via semantic tokens (`--island-math`, …), not ad-hoc colors.
+- The theme also names each track's **nodes** with a metaphor noun, derived from the theme: Math = **planets** (*Planet {n}*), Swedish = **glades** (*Glänta / Glade {n}*), English = **destinations** (*Resmål / Destination {n}*), Logic = **temples** (*Tempel / Temple {n}*).
+- Within an island, a **path of nodes** shows progress (completed = lit up / starred, next = highlighted, locked = dimmed; optional warm-up nodes before the child's start node stay playable).
+- The **profile** screen is reachable from a profile button in the **TopBar** and from the hub header.
+
+## Onboarding (first run)
+
+- On first run the app is **gated**: until an age is set it redirects to an `/onboarding` screen. It's an **audio-first age picker** — Skutt reads the greeting and the child taps one of big **3–9** buttons.
+- The chosen age sets the per-subject **starting node** and the behavioural defaults; it can be changed later from the Profile screen (the same picker, inline). Age is anonymous and stored client-side only.
 
 ## Visual language & tokens
 
@@ -46,7 +53,7 @@ A friendly character — **Skutt** — that *hops* (skutt/skutta) between island
 | Complexity | recognition/matching | multi-step (addition, reading) |
 | Feedback | immediate, very visual | visual + light scorekeeping |
 
-Age band is chosen at onboarding (sub-phase 1.10) and adjusts defaults; content is tagged by band.
+An **exact age** (3–9) is chosen at onboarding (sub-phase 1.10) and sets the per-subject **starting node**. The pre-reader/reader split (≤5 vs ≥6) is the **behavioural default** that adjusts the UI per the table above; earlier nodes stay available as optional warm-ups.
 
 ## Accessibility
 

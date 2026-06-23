@@ -7,6 +7,13 @@ import type { SubjectKey } from './content';
 
 export type AgeBand = '3-5' | '6-9';
 
+/** The exact ages a child can pick at onboarding. */
+export const MIN_AGE = 3;
+export const MAX_AGE = 9;
+
+/** The age band a given exact age belongs to (the behavioural pre-reader/reader split). */
+export const ageBandForAge = (age: number): AgeBand => (age <= 5 ? '3-5' : '6-9');
+
 export interface Streak {
   count: number;
   /** ISO date (YYYY-MM-DD) of the last calendar day played. */
@@ -38,6 +45,9 @@ export const DEFAULT_MASCOT_COLOR = 'mascot-color-default';
 export interface Profile {
   id: string;
   name: string;
+  /** The child's exact age (3–9), chosen at onboarding. `null` means not onboarded yet. */
+  age: number | null;
+  /** Behavioural band derived from {@link age} (kept for badge/UI logic that splits at age 6). */
   ageBand: AgeBand;
   avatar: string;
   coins: number;
@@ -57,6 +67,7 @@ export interface Profile {
 export const createDefaultProfile = (): Profile => ({
   id: 'local',
   name: 'Skutt',
+  age: null,
   ageBand: '3-5',
   avatar: 'fox',
   coins: 0,
