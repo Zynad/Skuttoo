@@ -63,10 +63,10 @@ test.describe('english island slices', () => {
       .poll(() => page.evaluate(() => (window as unknown as { __spoke: string[] }).__spoke.length))
       .toBeGreaterThan(0);
 
-    // The phrase is "three apples" — pick the picture of three apples (image-only choice).
+    // The phrase is "a red apple" — pick the apple picture (image-only choice).
     await choices
       .locator('button')
-      .filter({ has: page.locator('img[src*="apples-3"]') })
+      .filter({ has: page.locator('img[src*="apple.svg"]') })
       .click();
 
     await expect(page.getByTestId('reward-burst')).toBeVisible();
@@ -77,29 +77,27 @@ test.describe('english island slices', () => {
     await expect.poll(() => coinsValue(page)).toBe(earnedCoins);
   });
 
-  test('child listens and picks an English word, keeping Swedish instructions', async ({ page }) => {
-    await page.goto('/');
+  test('child listens and picks an English colour word, keeping Swedish instructions', async ({ page }) => {
+    // "Colours" is a later listen-and-pick node; unlock the earlier ones so it's playable.
+    await unlockBeforeTitle(page, 'english', /Färger|Colours/);
     await page.getByTestId('island-english').click();
     await expect(page).toHaveURL(/\/island\/english$/);
 
     const startingCoins = await coinsValue(page);
 
-    // Enter the "Listen and pick" level ("Lyssna och välj") on the path.
+    // Enter the "Colours" level ("Färger") on the path.
     await page
       .getByTestId('progress-path')
-      .getByRole('button', { name: /Lyssna och välj|Listen and pick/ })
+      .getByRole('button', { name: /Färger|Colours/ })
       .click();
     await expect(page).toHaveURL(/\/exercise\/\d+$/);
 
     const choices = page.getByTestId('choices');
     await expect(choices).toBeVisible();
 
-    // Instruction stays in Swedish (the UI language); the answer words are English.
-    await expect(page.getByText(/Lyssna och välj/)).toBeVisible();
-    await expect(choices.getByRole('button', { name: 'fish', exact: true })).toBeVisible();
-
-    // "fish" is the correct word.
-    await choices.getByRole('button', { name: 'fish', exact: true }).click();
+    // The answer words are English even though the instruction is Swedish; "red" is correct.
+    await expect(choices.getByRole('button', { name: 'red', exact: true })).toBeVisible();
+    await choices.getByRole('button', { name: 'red', exact: true }).click();
 
     await expect(page.getByTestId('reward-burst')).toBeVisible();
     await expect.poll(() => coinsValue(page)).toBeGreaterThan(startingCoins);

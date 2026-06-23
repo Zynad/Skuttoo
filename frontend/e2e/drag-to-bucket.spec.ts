@@ -34,27 +34,30 @@ test.describe('drag-to-bucket exercise', () => {
   });
 
   test('child sorts the words into the correct buckets and earns a reward', async ({ page }) => {
-    // The sorting level is the third stop; complete the earlier ones so it is unlocked.
-    await unlockBeforeIndex(page, 'english', 2);
+    // "Food & animals" sorting is the fifth node; complete the earlier ones so it is unlocked.
+    await unlockBeforeIndex(page, 'english', 4);
     const startingCoins = await coinsValue(page);
 
     await page.getByTestId('island-english').click();
-    // Third stop on the path -> the sorting level.
-    await page.getByTestId('progress-path').getByRole('button').nth(2).click();
+    // Fifth stop on the path -> the sorting level.
+    await page.getByTestId('progress-path').getByRole('button').nth(4).click();
     await expect(page).toHaveURL(/\/exercise\/\d+$/);
     await expect(page.getByTestId('bucket-tray')).toBeVisible();
 
     const tray = page.getByTestId('bucket-tray');
 
-    // Tap an item to pick it up, then tap its bucket to drop it.
+    // Tap an item to pick it up, then tap its bucket to drop it (apple+banana = food, dog+cat = animals).
     await tray.getByRole('button', { name: 'apple', exact: true }).click();
-    await page.getByTestId('bucket-fruit').click();
+    await page.getByTestId('bucket-food').click();
 
     await tray.getByRole('button', { name: 'banana', exact: true }).click();
-    await page.getByTestId('bucket-fruit').click();
+    await page.getByTestId('bucket-food').click();
 
-    await tray.getByRole('button', { name: 'car', exact: true }).click();
-    await page.getByTestId('bucket-vehicle').click();
+    await tray.getByRole('button', { name: 'dog', exact: true }).click();
+    await page.getByTestId('bucket-animals').click();
+
+    await tray.getByRole('button', { name: 'cat', exact: true }).click();
+    await page.getByTestId('bucket-animals').click();
 
     await expect(page.getByTestId('reward-burst')).toBeVisible();
     await expect.poll(() => coinsValue(page)).toBeGreaterThan(startingCoins);

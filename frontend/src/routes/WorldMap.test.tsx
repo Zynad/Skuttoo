@@ -36,7 +36,7 @@ describe('WorldMap', () => {
     expect(screen.getByTestId('island-math')).toHaveTextContent('Math');
   });
 
-  it('shows per-island star progress and guides the child to the next island', async () => {
+  it('shows per-island star progress on the subject card', async () => {
     await saveProfile({
       ...createDefaultProfile(),
       coins: 10,
@@ -56,10 +56,15 @@ describe('WorldMap', () => {
 
     renderWithProviders(<WorldMap />, { lang: 'sv' });
 
-    // The Math node reflects the earned stars once the stored profile loads.
+    // The Math card reflects the earned stars once the stored profile loads.
     await waitFor(() => expect(screen.getByTestId('island-math-stars')).toHaveTextContent('3'));
+  });
 
-    // Math is started, so Skutt nudges the child to the first un-started island (Svenska).
-    expect(screen.getByTestId('mascot-bubble')).toHaveTextContent('Svenska');
+  it('greets neutrally without singling out a subject', () => {
+    renderWithProviders(<WorldMap />, { lang: 'sv' });
+    // The hub is a plain set of four choices; Skutt greets but does not point at one subject.
+    expect(screen.getByTestId('subject-grid')).toBeInTheDocument();
+    expect(screen.getByTestId('mascot-bubble')).toHaveTextContent('Skutt');
+    expect(screen.getByTestId('mascot-bubble')).not.toHaveTextContent('Svenska');
   });
 });

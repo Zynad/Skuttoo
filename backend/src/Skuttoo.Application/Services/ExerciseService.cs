@@ -49,7 +49,7 @@ public sealed class ExerciseService(IExerciseRepository exercises) : IExerciseSe
             ?? throw new NotFoundException("Choice", request.ChoiceId.Value);
 
         var isCorrect = chosen.Id == correctChoice.Id;
-        var reward = isCorrect ? new Reward(exercise.RewardCoins, exercise.RewardStars) : Reward.None;
+        var reward = isCorrect ? RewardFor(exercise, request.AttemptNumber) : Reward.None;
 
         return new AttemptResult(isCorrect, correctChoice.Id, reward);
     }
@@ -75,7 +75,7 @@ public sealed class ExerciseService(IExerciseRepository exercises) : IExerciseSe
                 && keys.Count == 1
                 && string.Equals(keys[0], c.GroupKey, StringComparison.Ordinal));
 
-        var reward = correct ? new Reward(exercise.RewardCoins, exercise.RewardStars) : Reward.None;
+        var reward = correct ? RewardFor(exercise, request.AttemptNumber) : Reward.None;
         return new AttemptResult(correct, null, reward, reveal);
     }
 
@@ -104,8 +104,21 @@ public sealed class ExerciseService(IExerciseRepository exercises) : IExerciseSe
             .ToList();
 
         var correct = allItemsPlacedOnce && SamePartition(correctGroups, clientGroups);
-        var reward = correct ? new Reward(exercise.RewardCoins, exercise.RewardStars) : Reward.None;
+        var reward = correct ? RewardFor(exercise, request.AttemptNumber) : Reward.None;
         return new AttemptResult(correct, null, reward, reveal);
+    }
+
+    /// <summary>
+    /// The reward for a correct solve. Coins are flat; stars scale down by attempt so getting it
+    /// right early is worth more (1st try = full 3, 2nd = 2, 3rd+ = 1 — never below 1, since they
+    /// did get it right). The client only awards this on the first correct solve, so the stored
+    /// stars reflect how well the child did. A missing attempt number is treated as the first try.
+    /// </summary>
+    private static Reward RewardFor(Exercise exercise, int? attemptNumber)
+    {
+        var attempt = attemptNumber is > 0 ? attemptNumber.Value : 1;
+        var stars = Math.Max(1, exercise.RewardStars - (attempt - 1));
+        return new Reward(exercise.RewardCoins, stars);
     }
 
     private static IReadOnlyList<Placement> RequirePlacements(AttemptRequest request, Exercise exercise)

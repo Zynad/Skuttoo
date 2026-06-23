@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useT } from '../../i18n/useT';
 import { useLanguage } from '../../hooks/useLanguage';
 import { useSpeak } from '../../hooks/useSpeak';
 import { useProgress } from '../../hooks/useProgress';
 import { uiDefaultsForAge } from '../../utils/ageDefaults';
+import { contentApi } from '../../services/contentApi';
+import { nextExerciseId } from '../../utils/levelFlow';
 import { contentLangFor } from '../../i18n/contentLang';
 import { interactionFor } from '../../game/interactionKind';
 import { useExerciseFlow } from '../../game/useExerciseFlow';
@@ -95,6 +97,22 @@ export function ExerciseRunner({ exercise }: ExerciseRunnerProps) {
         ? t('exercise.dragToBuckets')
         : t('exercise.chooseAnswer');
 
+  // A node has several questions: after one is resolved, continue to the next question in the node;
+  // when it was the last, go back to the map (where the node lights up if it earned enough stars).
+  const handleContinue = useCallback(async () => {
+    try {
+      const level = await contentApi.getLevel(exercise.levelId);
+      const next = nextExerciseId(level.exercises, exercise.id);
+      if (next !== null) {
+        void navigate(`/exercise/${next}`);
+        return;
+      }
+    } catch {
+      // Fall through to returning to the map.
+    }
+    void navigate(-1);
+  }, [exercise.id, exercise.levelId, navigate]);
+
   return (
     <main className="relative mx-auto w-full max-w-2xl px-4 pb-24">
       {flow.phase === 'correct' && <RewardBurst coins={flow.awardedCoins} stars={flow.awardedStars} />}
@@ -180,7 +198,7 @@ export function ExerciseRunner({ exercise }: ExerciseRunnerProps) {
 
       {resolved && (
         <div className="mt-6 flex justify-center">
-          <Button size="lg" data-testid="continue-button" onClick={() => void navigate(-1)}>
+          <Button size="lg" data-testid="continue-button" onClick={() => void handleContinue()}>
             {t('exercise.continue')} →
           </Button>
         </div>

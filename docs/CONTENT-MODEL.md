@@ -8,24 +8,24 @@ How pedagogical content is structured, authored, localized and voiced. Content i
 Subject (island)  →  Level (difficulty stop)  →  Exercise  →  Choice(s)
 ```
 
-A child travels along a subject's themed track of **Levels** (the per-track node "stops"; easy → harder), each containing a handful of short **Exercises**. Difficulty is expressed both by `DifficultyTier` and a suggested `AgeMin/AgeMax` so the world adapts to a 3-year-old vs a 9-year-old.
+A child travels along a subject's themed track of **Levels** (the per-track node "stops"; easy → harder). A **node is 3 short Exercises at one difficulty**; difficulty rises **between** nodes. Difficulty is expressed both by `DifficultyTier` and a suggested `AgeMin/AgeMax` so the world adapts to a 3-year-old vs a 9-year-old.
 
-**Node counts (per track):** Math has **10** nodes; Swedish, English and Logic each have **9**. The deeper Math/6–9 content is genuinely harder (teens, subtraction, skip-counting, comparison, two-digit addition with carry).
+**Node counts:** every track has **10 nodes**, each with **3 same-difficulty questions**. The next node unlocks at **≥ 4 stars on the current node, or when all 3 questions are solved** (see `GAMIFICATION.md`). The deeper 6–9 content is genuinely harder (Math: teens, subtraction, skip-counting, two-digit addition with carry; Swedish: blends, longer words, short sentences; English: phrases, sentences; Logic: multi-step patterns, odd-one-out, order-by-size).
 
 ## Subjects & exercise types (MVP)
 
 | Island | Theme idea | Node metaphor (sv / en) | Exercise types | Age focus |
 |---|---|---|---|---|
-| **Math** (Matematik) | space/numbers | *Planet {n}* | `CountObjects`, `NumberRecognition`, `SimpleAddition`, `ShapeMatch` | 3–9, scaling |
-| **Logic & shapes/colors** (Logik) | jungle/sorting | *Tempel / Temple {n}* | `ColorMatch`, `ShapeMatch`, `PatternNext` (image-only) | 3–6 (non-readers), now reaching 7–9 |
-| **Swedish** (Svenska) | letters/forest | *Glänta / Glade {n}* | `LetterSound`, `WordImageMatch`, early reading | 4–9 |
-| **English** (Engelska) | travel/words | *Resmål / Destination {n}* | `ListenPickWord`, `WordImageMatch` (listen & pick) | 5–9 |
+| **Math** (Matematik) | space/numbers | *Planet {n}* | `CountObjects`, `NumberRecognition`, `SimpleAddition`, `DragToBucket`, `PatternNext` | 3–9, scaling |
+| **Logic & shapes/colors** (Logik) | jungle/sorting | *Tempel / Temple {n}* | `ColorMatch`, `ShapeMatch`, `PatternNext`, `DragToBucket` (image-only) | 3–9 (non-readers up) |
+| **Swedish** (Svenska) | letters/forest | *Glänta / Glade {n}* | `WordImageMatch`, `LetterSound`, `TapToMatch`, `DragToBucket` | 4–9 |
+| **English** (Engelska) | travel/words | *Resmål / Destination {n}* | `ListenPickWord`, `WordImageMatch`, `TapToMatch`, `DragToBucket` | 5–9 |
 
 The **Logic** island is deliberately image- and audio-only so the youngest can play before they can read.
 
 Each subject opens its **own themed map** (the world map is the hub). The node metaphor noun above is **derived client-side from `Subject.ThemeKey`** (via `islandTheme.ts`) — there is no backend field and no DB migration for it.
 
-**`SimpleAddition` is the single-choice arithmetic type.** Beyond simple addition it now also covers subtraction, teens, two-digit addition (incl. carry) and bigger/smaller comparison — all graded as single-correct-choice. **No new `ExerciseType` was added** for the deeper content.
+**`SimpleAddition` is the single-choice arithmetic type.** Beyond simple addition it now also covers subtraction, teen sums and two-digit addition (incl. carry) — all graded as single-correct-choice. (Comparison / sorting is a `DragToBucket` node.) **No new `ExerciseType` was added** for the deeper content.
 
 ## Age-adaptation principles
 

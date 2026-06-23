@@ -17,6 +17,27 @@ export function isLevelCompleted(level: Level, results: ExerciseResult[]): boole
   return level.exerciseIds.every((id) => done.has(id));
 }
 
+/** Stars a child must earn on a node before the next one unlocks — a quality gate, not just completion. */
+export const PASS_STARS = 4;
+
+/** Total stars earned across a node's exercises (each solve is worth 3/2/1 by attempt). */
+export function levelStars(level: Level, results: ExerciseResult[]): number {
+  const ids = new Set(level.exerciseIds);
+  return results
+    .filter((r) => r.completed && ids.has(r.exerciseId))
+    .reduce((sum, r) => sum + (r.starsEarned ?? 0), 0);
+}
+
+/**
+ * A node is "passed" — lit and unlocking the next — once at least {@link PASS_STARS} stars are earned
+ * on it, OR every question in it has been solved. The "all solved" fallback guarantees there's never
+ * a dead-end: a child who answers all 3 questions (even on later tries, earning fewer stars) still
+ * moves on, while doing well enough (4+ stars) lets them pass without acing every single question.
+ */
+export function isLevelPassed(level: Level, results: ExerciseResult[]): boolean {
+  return levelStars(level, results) >= PASS_STARS || isLevelCompleted(level, results);
+}
+
 /**
  * Index of the level an exact age should start on: the first level (in display order) whose
  * suggested age range still reaches the child's age (`ageMax >= age`) — i.e. the earliest node
@@ -33,28 +54,29 @@ export function startNodeForAge(levels: Level[], age: number | null): number {
 }
 
 /**
- * Resolves the play state of each level (in display order). Completed levels are lit. Nodes before
- * the age-appropriate start node (see {@link startNodeForAge}) are `optional` — playable warm-ups
- * that never block progress. From the start onward, the first not-yet-completed node is `current`,
- * the very next is `available` (a one-step lookahead so a child isn't hard-blocked), and anything
- * further ahead is `locked` (visible but dimmed). Islands themselves are never locked — only levels
- * within an island. (Sub-phases 1.7 + exact-age onboarding.)
+ * Resolves the play state of each level (in display order). A node is lit (`completed`) once it is
+ * **passed** — at least {@link PASS_STARS} stars earned on it (see {@link isLevelPassed}) — which is
+ * what unlocks the next one. Nodes before the age-appropriate start node (see {@link startNodeForAge})
+ * are `optional` — playable warm-ups that never block progress. From the start onward, the first
+ * not-yet-passed node is `current`, the very next is `available` (a one-step lookahead so a child
+ * isn't hard-blocked), and anything further ahead is `locked`. Islands themselves are never locked —
+ * only levels within an island. (Sub-phases 1.7 + exact-age onboarding + the 4-star gate.)
  */
 export function levelStates(levels: Level[], results: ExerciseResult[], age: number | null): PlayState[] {
-  const completed = levels.map((level) => isLevelCompleted(level, results));
+  const passed = levels.map((level) => isLevelPassed(level, results));
   const start = startNodeForAge(levels, age);
 
-  // Current = first not-yet-completed node at or after the start; optional warm-ups don't block it.
+  // Current = first not-yet-passed node at or after the start; optional warm-ups don't block it.
   let currentIndex = -1;
   for (let i = start; i < levels.length; i += 1) {
-    if (!completed[i]) {
+    if (!passed[i]) {
       currentIndex = i;
       break;
     }
   }
 
   return levels.map((_, index) => {
-    if (completed[index]) {
+    if (passed[index]) {
       return 'completed';
     }
     if (index < start) {

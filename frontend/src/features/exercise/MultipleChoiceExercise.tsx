@@ -1,7 +1,9 @@
+import { useMemo } from 'react';
 import { Choice, type ChoiceStatus } from '../../components/Choice';
 import type { AttemptRequest, Exercise } from '../../types/content';
 import type { Lang } from '../../i18n/dictionaries';
 import type { FlowPhase } from '../../game/useExerciseFlow';
+import { shuffle } from '../../utils/shuffle';
 
 export interface MultipleChoiceExerciseProps {
   exercise: Exercise;
@@ -39,11 +41,13 @@ export function MultipleChoiceExercise({
     return 'idle';
   };
 
-  const sortedChoices = [...exercise.choices].sort((a, b) => a.displayOrder - b.displayOrder);
+  // Shuffle once per exercise so the correct answer isn't always in the same slot, but stays put
+  // while the child is choosing.
+  const choices = useMemo(() => shuffle(exercise.choices), [exercise.choices]);
 
   return (
     <section className="grid grid-cols-2 gap-3" data-testid="choices">
-      {sortedChoices.map((choice, index) => (
+      {choices.map((choice, index) => (
         <Choice
           key={choice.id}
           choice={choice}

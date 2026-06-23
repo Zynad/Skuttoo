@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { ensureOnboarded } from './helpers';
+import { ensureOnboarded, unlockBeforeIndex } from './helpers';
 
 /**
  * Tap-to-match exercise (mobile viewport): open / -> English island -> second level ->
@@ -35,12 +35,13 @@ test.describe('tap-to-match exercise', () => {
   });
 
   test('child matches every word to its picture and earns a reward', async ({ page }) => {
-    await page.goto('/');
+    // "Match words" is the third node; unlock the earlier ones so it's playable.
+    await unlockBeforeIndex(page, 'english', 2);
     const startingCoins = await coinsValue(page);
 
     await page.getByTestId('island-english').click();
-    // Second stop on the path -> the matching level.
-    await page.getByTestId('progress-path').getByRole('button').nth(1).click();
+    // Third stop on the path -> the matching level.
+    await page.getByTestId('progress-path').getByRole('button').nth(2).click();
     await expect(page).toHaveURL(/\/exercise\/\d+$/);
 
     const grid = page.getByTestId('match-grid');

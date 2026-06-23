@@ -78,26 +78,5 @@ test.describe('math island slices', () => {
     await expect.poll(() => coinsValue(page)).toBe(earnedCoins);
   });
 
-  test('child taps the matching shape and earns a reward', async ({ page }) => {
-    // Shapes is a later level; complete the earlier ones so it is unlocked.
-    await unlockBeforeTitle(page, 'math', /Former|Shapes/);
-    await page.getByTestId('island-math').click();
-    await expect(page).toHaveURL(/\/island\/math$/);
-
-    const startingCoins = await coinsValue(page);
-
-    // Enter the Shapes level ("Former") on the path.
-    await page
-      .getByTestId('progress-path')
-      .getByRole('button', { name: /Former|Shapes/ })
-      .click();
-    await expect(page).toHaveURL(/\/exercise\/\d+$/);
-    await expect(page.getByTestId('choices')).toBeVisible();
-
-    // First shapes exercise asks to tap the circle ("Cirkel" in Swedish).
-    await page.getByTestId('choices').getByRole('button', { name: 'Cirkel', exact: true }).click();
-
-    await expect(page.getByTestId('reward-burst')).toBeVisible();
-    await expect.poll(() => coinsValue(page)).toBeGreaterThan(startingCoins);
-  });
+  // (Shapes moved to the Logic island in the 10×3 rebuild — see logic-island.spec.)
 });

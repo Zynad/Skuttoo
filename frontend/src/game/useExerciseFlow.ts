@@ -5,7 +5,9 @@ import { useProgress } from '../hooks/useProgress';
 
 export type FlowPhase = 'answering' | 'correct' | 'wrong' | 'revealed';
 
-const REVEAL_AFTER_ATTEMPTS = 2;
+// Three gentle tries before the answer is revealed — matches the 3/2/1 star tiers (1st try = 3
+// stars, 2nd = 2, 3rd = 1), so a child who gets it on the third attempt still earns a star.
+const REVEAL_AFTER_ATTEMPTS = 3;
 
 export interface ExerciseFlowState {
   phase: FlowPhase;

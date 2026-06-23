@@ -39,7 +39,7 @@ test.describe('world map', () => {
   test('shows the four island stops and guides the child with the mascot', async ({ page }) => {
     await page.goto('/');
 
-    await expect(page.getByTestId('island-trail')).toBeVisible();
+    await expect(page.getByTestId('subject-grid')).toBeVisible();
     for (const key of ['math', 'swedish', 'english', 'logic']) {
       await expect(page.getByTestId(`island-${key}`)).toBeVisible();
     }

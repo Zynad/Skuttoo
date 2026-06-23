@@ -4,24 +4,19 @@ import { useProgress } from '../hooks/useProgress';
 import { CoinsBadge } from '../components/CoinsBadge';
 import { LanguageToggle } from '../components/LanguageToggle';
 import { ThemeToggle } from '../components/ThemeToggle';
-import { IslandNode } from '../components/IslandNode';
+import { SubjectCard } from '../components/SubjectCard';
 import { MascotBubble } from '../components/MascotBubble';
 import { SkyBackground } from '../components/SkyBackground';
 import { ISLAND_ORDER, islandThemes, type IslandTheme } from '../utils/islandTheme';
-import { islandProgress, nextIsland } from '../utils/progressSummary';
+import { islandProgress } from '../utils/progressSummary';
 
-/** Home screen: the playful world map — a winding trail of subject islands, guided by Skutt. */
+/** Home hub: pick one of the four subjects. Skutt greets neutrally — no subject is singled out. */
 export function WorldMap() {
   const navigate = useNavigate();
   const t = useT();
   const { profile } = useProgress();
 
   const enterIsland = (theme: IslandTheme) => void navigate(`/island/${theme.key}`);
-
-  const next = nextIsland(profile.results);
-  const nextName = t(islandThemes[next].nameKey);
-  const started = profile.results.length > 0;
-  const guidance = started ? t('worldmap.next', { island: nextName }) : t('worldmap.mascotGreeting');
 
   return (
     <div className="min-h-full">
@@ -53,41 +48,19 @@ export function WorldMap() {
         </div>
 
         <div className="mt-5">
-          <MascotBubble message={guidance} state="happy" withAudio mascotSize={96} />
+          <MascotBubble message={t('worldmap.mascotGreeting')} state="happy" withAudio mascotSize={88} />
         </div>
 
-        {/* The trail: a winding path connecting the island stops, alternating sides. */}
-        <div className="relative mt-8" data-testid="island-trail">
-          <svg
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M28 11 C28 26 72 22 72 37 C72 52 28 48 28 63 C28 78 72 74 72 89"
-              fill="none"
-              stroke="var(--color-primary-soft)"
-              strokeWidth={7}
-              strokeLinecap="round"
-              opacity={0.85}
+        {/* The four choices. */}
+        <div className="mt-8 grid grid-cols-2 gap-4" data-testid="subject-grid">
+          {ISLAND_ORDER.map((key) => (
+            <SubjectCard
+              key={key}
+              theme={islandThemes[key]}
+              progress={islandProgress(key, profile.results)}
+              onEnter={enterIsland}
             />
-          </svg>
-
-          <ol className="relative flex list-none flex-col gap-8 p-0">
-            {ISLAND_ORDER.map((key, index) => (
-              <li key={key} className={`w-[72%] ${index % 2 === 1 ? 'self-end' : 'self-start'}`}>
-                <IslandNode
-                  theme={islandThemes[key]}
-                  progress={islandProgress(key, profile.results)}
-                  isNext={key === next}
-                  side={index % 2 === 1 ? 'right' : 'left'}
-                  index={index}
-                  onEnter={enterIsland}
-                />
-              </li>
-            ))}
-          </ol>
+          ))}
         </div>
       </main>
     </div>

@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { AttemptRequest, Exercise, Placement } from '../../types/content';
 import type { Lang } from '../../i18n/dictionaries';
 import type { FlowPhase } from '../../game/useExerciseFlow';
 import { imageUrl } from '../../utils/assets';
+import { shuffle } from '../../utils/shuffle';
 
 export interface TapToMatchExerciseProps {
   exercise: Exercise;
@@ -34,7 +35,8 @@ export function TapToMatchExercise({
   disabled,
   onSubmit,
 }: TapToMatchExerciseProps) {
-  const items = [...exercise.choices].sort((a, b) => a.displayOrder - b.displayOrder);
+  // Shuffle once per exercise so matching pairs aren't always in the same positions.
+  const items = useMemo(() => shuffle(exercise.choices), [exercise.choices]);
   const [pairKeyByItem, setPairKeyByItem] = useState<Record<number, string>>({});
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const submittedRef = useRef(false);

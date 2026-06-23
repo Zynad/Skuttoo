@@ -38,7 +38,8 @@ test.describe('swedish island slices', () => {
   });
 
   test('child hears a word and picks its first letter, earning a reward that persists', async ({ page }) => {
-    await page.goto('/');
+    // Letter sounds is a later node now; unlock the earlier ones so it's playable.
+    await unlockBeforeTitle(page, 'swedish', /Bokstavsljud|Letter sounds/);
     await expect(page.getByTestId('island-swedish')).toBeVisible();
 
     const startingCoins = await coinsValue(page);
@@ -71,27 +72,27 @@ test.describe('swedish island slices', () => {
   });
 
   test('child reads a word and picks the matching picture', async ({ page }) => {
-    // First reading is a later level; complete the earlier ones so it is unlocked.
-    await unlockBeforeTitle(page, 'swedish', /Första läsningen|First reading/);
+    // "Read the word" is a later node; complete the earlier ones so it is unlocked.
+    await unlockBeforeTitle(page, 'swedish', /Läs ordet|Read the word/);
     await page.getByTestId('island-swedish').click();
     await expect(page).toHaveURL(/\/island\/swedish$/);
 
     const startingCoins = await coinsValue(page);
 
-    // Enter the First reading level ("Första läsningen") on the path.
+    // Enter the "Read the word" level ("Läs ordet") on the path.
     await page
       .getByTestId('progress-path')
-      .getByRole('button', { name: /Första läsningen|First reading/ })
+      .getByRole('button', { name: /Läs ordet|Read the word/ })
       .click();
     await expect(page).toHaveURL(/\/exercise\/\d+$/);
 
     const choices = page.getByTestId('choices');
     await expect(choices).toBeVisible();
 
-    // The word is "hund" — pick the dog picture (image-only choice).
+    // The word is "blomma" — pick the flower picture (image-only choice).
     await choices
       .locator('button')
-      .filter({ has: page.locator('img[src*="pic-dog"]') })
+      .filter({ has: page.locator('img[src*="pic-flower"]') })
       .click();
 
     await expect(page.getByTestId('reward-burst')).toBeVisible();

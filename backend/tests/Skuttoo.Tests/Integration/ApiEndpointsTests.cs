@@ -145,6 +145,29 @@ public sealed class ApiEndpointsTests : IClassFixture<SkuttooWebApplicationFacto
     }
 
     [Fact]
+    public async Task Attempt_stars_scale_down_by_attempt_number()
+    {
+        var client = _factory.CreateClient();
+        var exerciseId = await GetFirstMathExerciseIdAsync(client);
+        var (correct, _) = await GetCorrectAndWrongChoiceAsync(client, exerciseId);
+
+        async Task<int> StarsForAttempt(int attempt)
+        {
+            var resp = await client.PostAsJsonAsync(
+                $"/api/exercises/{exerciseId}/attempt",
+                new { choiceId = correct, attemptNumber = attempt });
+            using var doc = JsonDocument.Parse(await resp.Content.ReadAsStringAsync());
+            return doc.RootElement.GetProperty("reward").GetProperty("stars").GetInt32();
+        }
+
+        // 1st try = 3 stars, 2nd = 2, 3rd = 1, and never below 1 once the answer is correct.
+        (await StarsForAttempt(1)).ShouldBe(3);
+        (await StarsForAttempt(2)).ShouldBe(2);
+        (await StarsForAttempt(3)).ShouldBe(1);
+        (await StarsForAttempt(5)).ShouldBe(1);
+    }
+
+    [Fact]
     public async Task Health_ready_returns_200()
     {
         var client = _factory.CreateClient();
@@ -220,7 +243,7 @@ public sealed class ApiEndpointsTests : IClassFixture<SkuttooWebApplicationFacto
     public async Task Get_dragToBucket_exercise_returns_buckets_without_leaking_answer()
     {
         var client = _factory.CreateClient();
-        var exerciseId = await GetExerciseIdAsync(client, "english", levelOrder: 3, exerciseOrder: 1);
+        var exerciseId = await GetExerciseIdAsync(client, "english", levelOrder: 5, exerciseOrder: 1);
 
         var raw = await client.GetStringAsync($"/api/exercises/{exerciseId}");
         raw.ShouldNotContain("isCorrect", Case.Insensitive);
@@ -241,7 +264,7 @@ public sealed class ApiEndpointsTests : IClassFixture<SkuttooWebApplicationFacto
     public async Task Attempt_dragToBucket_correct_placements_returns_reward()
     {
         var client = _factory.CreateClient();
-        var exerciseId = await GetExerciseIdAsync(client, "english", levelOrder: 3, exerciseOrder: 1);
+        var exerciseId = await GetExerciseIdAsync(client, "english", levelOrder: 5, exerciseOrder: 1);
         var correct = await GetRevealedPlacementsAsync(client, exerciseId);
 
         var response = await client.PostAsJsonAsync(
@@ -259,7 +282,7 @@ public sealed class ApiEndpointsTests : IClassFixture<SkuttooWebApplicationFacto
     public async Task Attempt_tapToMatch_correct_pairs_returns_reward()
     {
         var client = _factory.CreateClient();
-        var exerciseId = await GetExerciseIdAsync(client, "english", levelOrder: 2, exerciseOrder: 1);
+        var exerciseId = await GetExerciseIdAsync(client, "english", levelOrder: 3, exerciseOrder: 1);
 
         using var doc = JsonDocument.Parse(await client.GetStringAsync($"/api/exercises/{exerciseId}"));
         doc.RootElement.GetProperty("type").GetString().ShouldBe("tapToMatch");
@@ -281,7 +304,7 @@ public sealed class ApiEndpointsTests : IClassFixture<SkuttooWebApplicationFacto
     public async Task Attempt_dragToBucket_without_placements_returns_400()
     {
         var client = _factory.CreateClient();
-        var exerciseId = await GetExerciseIdAsync(client, "english", levelOrder: 3, exerciseOrder: 1);
+        var exerciseId = await GetExerciseIdAsync(client, "english", levelOrder: 5, exerciseOrder: 1);
 
         var response = await client.PostAsJsonAsync(
             $"/api/exercises/{exerciseId}/attempt",
@@ -314,15 +337,15 @@ public sealed class ApiEndpointsTests : IClassFixture<SkuttooWebApplicationFacto
 
         types.ShouldContain("countObjects");
         types.ShouldContain("numberRecognition");
-        types.ShouldContain("shapeMatch");
         types.ShouldContain("simpleAddition");
+        // (Shapes moved to the Logic island in the 10×3 rebuild; Math is now numbers/arithmetic.)
     }
 
     [Fact]
     public async Task Get_simpleAddition_exercise_serves_without_leaking_isCorrect()
     {
         var client = _factory.CreateClient();
-        var exerciseId = await GetExerciseIdAsync(client, "math", levelOrder: 4, exerciseOrder: 1);
+        var exerciseId = await GetExerciseIdAsync(client, "math", levelOrder: 6, exerciseOrder: 1);
 
         var raw = await client.GetStringAsync($"/api/exercises/{exerciseId}");
         raw.ShouldNotContain("isCorrect", Case.Insensitive);
@@ -346,7 +369,7 @@ public sealed class ApiEndpointsTests : IClassFixture<SkuttooWebApplicationFacto
     public async Task Attempt_simpleAddition_rewards_correct_and_is_gentle_on_wrong()
     {
         var client = _factory.CreateClient();
-        var exerciseId = await GetExerciseIdAsync(client, "math", levelOrder: 4, exerciseOrder: 1);
+        var exerciseId = await GetExerciseIdAsync(client, "math", levelOrder: 6, exerciseOrder: 1);
         var (correct, wrong) = await GetCorrectAndWrongChoiceAsync(client, exerciseId);
 
         var ok = await client.PostAsJsonAsync($"/api/exercises/{exerciseId}/attempt", new { choiceId = correct });
@@ -370,7 +393,7 @@ public sealed class ApiEndpointsTests : IClassFixture<SkuttooWebApplicationFacto
     public async Task Get_shapeMatch_exercise_serves_localized_choices()
     {
         var client = _factory.CreateClient();
-        var exerciseId = await GetExerciseIdAsync(client, "math", levelOrder: 3, exerciseOrder: 1);
+        var exerciseId = await GetExerciseIdAsync(client, "logic", levelOrder: 3, exerciseOrder: 1);
 
         var raw = await client.GetStringAsync($"/api/exercises/{exerciseId}");
         raw.ShouldNotContain("isCorrect", Case.Insensitive);
@@ -387,7 +410,7 @@ public sealed class ApiEndpointsTests : IClassFixture<SkuttooWebApplicationFacto
     public async Task Attempt_shapeMatch_correct_returns_reward()
     {
         var client = _factory.CreateClient();
-        var exerciseId = await GetExerciseIdAsync(client, "math", levelOrder: 3, exerciseOrder: 1);
+        var exerciseId = await GetExerciseIdAsync(client, "logic", levelOrder: 3, exerciseOrder: 1);
         var (correct, _) = await GetCorrectAndWrongChoiceAsync(client, exerciseId);
 
         var response = await client.PostAsJsonAsync($"/api/exercises/{exerciseId}/attempt", new { choiceId = correct });

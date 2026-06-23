@@ -14,7 +14,8 @@ import { Button } from '../components/Button';
 import { LoadingState } from '../components/LoadingState';
 import { ErrorState } from '../components/ErrorState';
 import { isSubjectKey, islandThemes } from '../utils/islandTheme';
-import { isLevelCompleted, levelStates } from '../utils/progressSummary';
+import { isLevelPassed, levelStates } from '../utils/progressSummary';
+import { firstUnsolvedExerciseId } from '../utils/levelFlow';
 import type { Level } from '../types/content';
 
 /** Subject island: shows the level path. Entering a level opens its first exercise. */
@@ -42,13 +43,14 @@ export function Island() {
 
   const openLevel = useCallback(
     async (level: Level) => {
+      // A node has several questions; open the first not-yet-solved one so a partly-done node resumes.
       const detail = await contentApi.getLevel(level.id);
-      const first = [...detail.exercises].sort((a, b) => a.displayOrder - b.displayOrder)[0];
-      if (first) {
-        void navigate(`/exercise/${first.id}`);
+      const exerciseId = firstUnsolvedExerciseId(detail.exercises, profile.results);
+      if (exerciseId !== null) {
+        void navigate(`/exercise/${exerciseId}`);
       }
     },
-    [navigate],
+    [navigate, profile.results],
   );
 
   // Once content is loaded, record which of this island's levels (and the island itself) are
@@ -57,7 +59,7 @@ export function Island() {
     if (!subject || !validKey) {
       return;
     }
-    const completedIds = subject.levels.filter((l) => isLevelCompleted(l, profile.results)).map((l) => l.id);
+    const completedIds = subject.levels.filter((l) => isLevelPassed(l, profile.results)).map((l) => l.id);
     const subjectComplete = subject.levels.length > 0 && completedIds.length === subject.levels.length;
     void syncSubjectCompletion(validKey, completedIds, subjectComplete).then((keys) => {
       if (keys.length) {

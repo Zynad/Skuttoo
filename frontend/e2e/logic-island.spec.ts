@@ -38,7 +38,8 @@ test.describe('logic island slices', () => {
   });
 
   test('child taps the matching shape and earns a reward, which persists', async ({ page }) => {
-    await page.goto('/');
+    // Shapes is a later node now; unlock the earlier ones so it's playable.
+    await unlockBeforeTitle(page, 'logic', /Former|Shapes/);
     await expect(page.getByTestId('island-logic')).toBeVisible();
 
     const startingCoins = await coinsValue(page);

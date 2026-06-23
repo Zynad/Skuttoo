@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { AttemptRequest, Exercise, Placement } from '../../types/content';
 import type { Lang } from '../../i18n/dictionaries';
 import type { FlowPhase } from '../../game/useExerciseFlow';
 import { imageUrl } from '../../utils/assets';
+import { shuffle } from '../../utils/shuffle';
 
 export interface DragToBucketExerciseProps {
   exercise: Exercise;
@@ -26,7 +27,9 @@ export function DragToBucketExercise({
   disabled,
   onSubmit,
 }: DragToBucketExerciseProps) {
-  const items = [...exercise.choices].sort((a, b) => a.displayOrder - b.displayOrder);
+  // Shuffle the draggable items once per exercise so they aren't always in the same spot; buckets
+  // keep their authored order (they're labelled categories).
+  const items = useMemo(() => shuffle(exercise.choices), [exercise.choices]);
   const buckets = [...exercise.buckets].sort((a, b) => a.displayOrder - b.displayOrder);
   const [placedByItem, setPlacedByItem] = useState<Record<number, string>>({});
   const [pickedId, setPickedId] = useState<number | null>(null);

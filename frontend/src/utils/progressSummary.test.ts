@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { isLevelCompleted, islandProgress, levelStates, nextIsland, startNodeForAge } from './progressSummary';
+import {
+  isLevelCompleted,
+  isLevelPassed,
+  islandProgress,
+  levelStars,
+  levelStates,
+  nextIsland,
+  startNodeForAge,
+} from './progressSummary';
 import type { Level } from '../types/content';
 import type { ExerciseResult } from '../types/progress';
 
@@ -66,31 +74,54 @@ describe('startNodeForAge', () => {
   });
 });
 
+describe('levelStars / isLevelPassed', () => {
+  it('sums the stars earned across a node and gates on >= 4', () => {
+    const node = level(1, [10, 11, 12]);
+    expect(levelStars(node, [result(10, true)])).toBe(3); // one solve
+    expect(isLevelPassed(node, [result(10, true)])).toBe(false); // 3 < 4
+    expect(levelStars(node, [result(10, true), result(11, true)])).toBe(6);
+    expect(isLevelPassed(node, [result(10, true), result(11, true)])).toBe(true); // 6 >= 4
+  });
+
+  it('reaches the gate with mixed star values (e.g. 3 + 1)', () => {
+    const node = level(1, [10, 11]);
+    const results = [result(10, true, { starsEarned: 3 }), result(11, true, { starsEarned: 1 })];
+    expect(levelStars(node, results)).toBe(4);
+    expect(isLevelPassed(node, results)).toBe(true);
+  });
+});
+
 describe('levelStates', () => {
-  const levels = [level(1, [10, 11]), level(2, [20, 21]), level(3, [30])];
+  // Nodes have multiple questions; a node is "passed" (lit + unlocks next) once it earns >= 4 stars.
+  const levels = [level(1, [10, 11]), level(2, [20, 21]), level(3, [30, 31])];
 
   it('makes the current level and the next one playable, and locks the rest', () => {
     expect(levelStates(levels, [], null)).toEqual(['current', 'available', 'locked']);
   });
 
-  it('lights completed levels and moves current + available forward', () => {
-    const results = [result(10, true), result(11, true)];
+  it('lights passed levels and moves current + available forward', () => {
+    const results = [result(10, true), result(11, true)]; // 6 stars on node 1 -> passed
     expect(levelStates(levels, results, null)).toEqual(['completed', 'current', 'available']);
   });
 
-  it('marks every level completed when all exercises are solved (no locks)', () => {
-    const results = [10, 11, 20, 21, 30].map((id) => result(id, true));
+  it('does not advance until the node clears the 4-star gate', () => {
+    const results = [result(10, true)]; // only 3 stars on node 1 -> not passed
+    expect(levelStates(levels, results, null)).toEqual(['current', 'available', 'locked']);
+  });
+
+  it('marks every level passed when all are cleared (no locks)', () => {
+    const results = [10, 11, 20, 21, 30, 31].map((id) => result(id, true));
     expect(levelStates(levels, results, null)).toEqual(['completed', 'completed', 'completed']);
   });
 
-  it('keeps levels beyond the one-step lookahead locked even if a later one was solved', () => {
-    const results = [result(20, true), result(21, true)]; // second level done, first not
+  it('keeps levels beyond the one-step lookahead locked even if a later one was passed', () => {
+    const results = [result(20, true), result(21, true)]; // second node passed, first not
     expect(levelStates(levels, results, null)).toEqual(['current', 'completed', 'locked']);
   });
 
   describe('with an exact age', () => {
     // Nodes for ages 3–5, 5–7, 7–9 so an older child starts further along.
-    const aged = [agedLevel(1, 3, 5, [10]), agedLevel(2, 5, 7, [20]), agedLevel(3, 7, 9, [30])];
+    const aged = [agedLevel(1, 3, 5, [10, 11]), agedLevel(2, 5, 7, [20, 21]), agedLevel(3, 7, 9, [30, 31])];
 
     it('marks nodes before the age-appropriate start as optional and starts there', () => {
       // A 9-year-old with no progress: first two nodes are optional warm-ups, the third is current.
@@ -105,8 +136,8 @@ describe('levelStates', () => {
       expect(levelStates(aged, [], 3)).toEqual(['current', 'available', 'locked']);
     });
 
-    it('still completes the start node and leaves no current when an older child finishes it', () => {
-      const results = [result(30, true)]; // the 7–9 node solved, warm-ups skipped
+    it('lights the start node and leaves no current when an older child passes it', () => {
+      const results = [result(30, true), result(31, true)]; // the 7–9 node passed, warm-ups skipped
       expect(levelStates(aged, results, 9)).toEqual(['optional', 'optional', 'completed']);
     });
   });

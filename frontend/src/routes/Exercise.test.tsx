@@ -102,7 +102,7 @@ describe('Exercise route', () => {
     expect(screen.getByTestId('choice-2')).toBeEnabled();
   });
 
-  it('reveals the correct answer after two wrong tries', async () => {
+  it('reveals the correct answer after three wrong tries', async () => {
     vi.spyOn(contentApi, 'submitAttempt').mockResolvedValue({
       correct: false,
       correctChoiceId: 2,
@@ -112,9 +112,12 @@ describe('Exercise route', () => {
     renderWithProviders(<Exercise />, { route: '/exercise/101' });
     await screen.findByText('Hur många äpplen?');
 
+    // Three gentle tries before the reveal (matches the 3/2/1 star tiers).
     await userEvent.click(screen.getByTestId('choice-1'));
-    await waitFor(() => expect(screen.getByTestId('feedback')).toHaveAttribute('data-phase', 'wrong'));
+    await waitFor(() => expect(screen.getByTestId('choice-1')).toHaveAttribute('data-status', 'wrong'));
     await userEvent.click(screen.getByTestId('choice-3'));
+    await waitFor(() => expect(screen.getByTestId('choice-3')).toHaveAttribute('data-status', 'wrong'));
+    await userEvent.click(screen.getByTestId('choice-1'));
 
     await waitFor(() => expect(screen.getByTestId('feedback')).toHaveAttribute('data-phase', 'revealed'));
     expect(screen.getByTestId('choice-2')).toHaveAttribute('data-status', 'revealed');
